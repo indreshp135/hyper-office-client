@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
+    "@emotion/react": "^11.10.0",
+    "@mantine/core": "^5.0.3",
+    "@mantine/ds": "^5.0.3",
+    "@mantine/form": "^5.0.3",
+    "@mantine/hooks": "^5.0.3",
+    "@mantine/notifications": "^5.0.3",
+    "@tabler/icons": "^1.78.1",
+    "axios": "^0.27.2",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.0"
   },
@@ -15,7 +22,16 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint '**/*.{js,jsx}'",
+    "lint:fix": "eslint '**/*.{js,jsx}' --fix",
+    "stylelint": "stylelint '**/*.css'",
+    "stylelint:fix": "stylelint '**/*.css' --fix",
+    "prettier": "prettier '**/*.{json,md,html,yaml}' --list-different",
+    "prettier:fix": "prettier '**/*.{json,md,html,yaml}'  --write",
+    "format": "npm run lint:fix && npm run stylelint:fix && npm run prettier:fix",
+    "format:error": "npm run lint && npm run stylelint && npm run prettier",
+    "postinstall": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +50,34 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint"
+    ],
+    "*.{json,md,html,yaml}": [
+      "prettier --list-different"
+    ],
+    "*.css": [
+      "stylelint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "stylelint": "^14.9.1",
+    "stylelint-config-standard": "^26.0.0"
   }
 }

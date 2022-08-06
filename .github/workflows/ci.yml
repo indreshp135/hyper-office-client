@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "!prod"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('./package.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+
+        run: |
+          yarn install
+
+      - name: Build
+        run: |
+          cp src/config.example.js src/config.js
+          yarn run lint
+          yarn run build
