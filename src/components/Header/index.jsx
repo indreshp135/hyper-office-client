@@ -7,7 +7,7 @@ import { upperFirst, useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantine/ds';
 import { IconMoon, IconSun } from '@tabler/icons';
 
-const HEADER_HEIGHT = 60;
+const HEADER_HEIGHT = 80;
 
 const useStyles = createStyles((theme) => ({
   root: {

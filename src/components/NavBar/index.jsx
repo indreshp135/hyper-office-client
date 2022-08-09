@@ -1,26 +1,17 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   createStyles, Navbar, UnstyledButton
 } from '@mantine/core';
 import {
-  IconFingerprint,
-  IconHome,
-  IconLogout,
-  IconBan
+  IconLogout
 } from '@tabler/icons';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
+import { navLinks } from '../../routes/navLinks';
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
   return {
-    header: {
-      paddingBottom: theme.spacing.md,
-      marginBottom: theme.spacing.md * 1.5,
-      borderBottom: `1px solid ${
-        theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-      }`
-    },
 
     footer: {
       paddingTop: theme.spacing.md,
@@ -70,23 +61,22 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-const data = [
-  { link: '/', label: 'Home', icon: IconHome },
-  { link: '/asads', label: '404', icon: IconBan },
-  { link: '/auth', label: 'Auth', icon: IconFingerprint }
-];
-
 export function NavBar() {
+  const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState('Home');
 
-  const links = data.map((item) => (
+  useEffect(() => {
+    setActive(location.pathname);
+  }, [location]);
+
+  const links = navLinks.map((item) => (
     <Link
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      className={cx(classes.link, { [classes.linkActive]: item.link === active })}
       to={item.link}
       key={item.label}
       onClick={() => {
-        setActive(item.label);
+        setActive(item.link);
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
@@ -95,13 +85,13 @@ export function NavBar() {
   ));
 
   return (
-    <Navbar height={window.innerHeight - 68} p="md">
+    <Navbar height={Math.max(document.body.clientHeight, window.innerHeight) - 88} p="md">
       <Navbar.Section grow>
         {links}
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <UnstyledButton href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <UnstyledButton className={classes.link} onClick={(event) => event.preventDefault()}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
         </UnstyledButton>
