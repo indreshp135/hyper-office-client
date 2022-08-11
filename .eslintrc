@@ -34,6 +34,7 @@
     "eol-last": ["error", "unix"],
     "comma-dangle": ["error", "never"],
     "import/prefer-default-export": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

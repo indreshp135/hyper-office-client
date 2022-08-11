@@ -1,9 +1,14 @@
 import React from 'react';
 
-import { HomePageContainer } from '../containers/HomePageContainer';
+import { GeneralPageContainer } from '../containers/GeneralPageContainer';
 import { AuthPageContainer } from '../containers/AuthPageContainer';
-import { FormBuilderContainer } from '../containers/FormBuilderContainer';
-import { FormViewerContainer } from '../containers/FormViewerContainer';
+
+import { Homepage } from '../components/Home';
+import { Formbuilder } from '../components/FormBuilder';
+import { FormViewer } from '../components/FormViewer';
+import { FileUpload } from '../components/FileUpload';
+import { Workflow } from '../components/Workflow';
+import { ListWorkFlow } from '../components/ListWorkflow';
 
 export const publicRoutes = [
   {
@@ -16,17 +21,37 @@ export const publicRoutes = [
 export const privateRoutes = [
   {
     url: '/',
-    component: <HomePageContainer />,
+    component: <GeneralPageContainer child={<Homepage />} />,
     name: 'HomePageContainer'
   },
   {
     url: '/formbuilder',
-    component: <FormBuilderContainer />,
+    component: <GeneralPageContainer child={<Formbuilder />} />,
     name: 'FormBuilderContainer'
   },
   {
     url: '/formviewer',
-    component: <FormViewerContainer />,
+    component: <GeneralPageContainer child={<FormViewer />} />,
     name: 'FormViewerContainer'
+  },
+  {
+    url: '/fileupload',
+    component: <GeneralPageContainer child={<FileUpload />} />,
+    name: 'FileUploadContainer'
+  },
+  {
+    url: '/workflow',
+    component: <GeneralPageContainer child={<ListWorkFlow />} />,
+    name: 'ListWorkFlowContainer'
+  },
+  {
+    url: '/workflow/:id',
+    component: <GeneralPageContainer child={<Workflow />} />,
+    name: 'WorkflowContainer'
+  },
+  {
+    url: '/workflow/create',
+    component: <GeneralPageContainer child={<Workflow />} />,
+    name: 'WorkflowContainer'
   }
 ];

@@ -85,7 +85,7 @@ export function NavBar() {
   ));
 
   return (
-    <Navbar height={Math.max(document.body.clientHeight, window.innerHeight) - 88} p="md">
+    <Navbar height={Math.max(window.innerHeight) - 80} p="md">
       <Navbar.Section grow>
         {links}
       </Navbar.Section>
