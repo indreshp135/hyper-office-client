@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Container, Paper, Title, Center, Button,
   createStyles, TextInput, Select,
-  Drawer
+  Modal, useMantineTheme
 } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons';
@@ -61,6 +61,8 @@ export function Workflow() {
     setOpened(false);
   };
 
+  const theme = useMantineTheme();
+
   // useEffect and fetch data from server
 
   return (
@@ -81,6 +83,7 @@ export function Workflow() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             m={10}
+            required
           />
           <DndList state={state} handlers={handlers} />
           <Center>
@@ -104,12 +107,15 @@ export function Workflow() {
           </Button>
         </Center>
       </Container>
-      <Drawer
+      <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Add Data"
-        padding="xl"
-        size="xl"
+        overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
+        overlayOpacity={0.85}
+        overlayBlur={3}
+        size="lg"
+        centered
+        title="Add a new step"
       >
         <div>
           <TextInput
@@ -130,11 +136,13 @@ export function Workflow() {
             }}
             value={designation}
           />
-          <Button m={20} onClick={handleDrawerClose}>
-            Submit
-          </Button>
+          <Center>
+            <Button m={20} onClick={handleDrawerClose}>
+              Submit
+            </Button>
+          </Center>
         </div>
-      </Drawer>
+      </Modal>
     </>
   );
 }

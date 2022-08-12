@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  Container, Paper, SimpleGrid, Button, Grid
+  Container, Paper, SimpleGrid, UnstyledButton, Grid, Button, Title
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { IconEdit, IconTrash } from '@tabler/icons';
 
 function WorkFlows() {
   const navigate = useNavigate();
@@ -18,12 +19,18 @@ function WorkFlows() {
   ]; // Should be fetched from a server
   return (
     data.map((item) => (
-      <Paper key={item.id} shadow="xl" m={10} p={20} withBorder>
+      <Paper key={item.id} shadow="xl" m={5} p={20} withBorder>
         <Grid>
-          <Grid.Col>{item.name}</Grid.Col>
-          <Grid.Col>
-            <Button m={10} variant="outline" color="yellow" onClick={() => navigate(`./${item.id}`)}>Edit</Button>
-            <Button m={10} color="red">Delete</Button>
+          <Grid.Col span={8}><Title order={3}>{item.name}</Title></Grid.Col>
+          <Grid.Col
+            span={4}
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end'
+            }}
+          >
+            <UnstyledButton m={10} onClick={() => navigate(`./${item.id}`)}><IconEdit color="orange" /></UnstyledButton>
+            <UnstyledButton m={10}><IconTrash color="red" /></UnstyledButton>
           </Grid.Col>
         </Grid>
       </Paper>

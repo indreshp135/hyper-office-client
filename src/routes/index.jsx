@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router, Routes, Route, Navigate
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { publicRoutes, privateRoutes } from './routes';
 import { HeaderNav } from '../components/Header';
-// import { getIsAuthenticated } from '../requests';
 import { Page404 } from '../components/Page404';
+import { userRequest } from '../utils/requests';
 
 export function Routers() {
   return (
@@ -31,19 +31,25 @@ ProtectedRoute.propTypes = {
 };
 
 function Switches() {
-  // const [isAuthenticated, setIsAuthenticated] = useState(true);
-  // useEffect(async () => {
-  //   if (sessionStorage.getItem('Token')) {
-  //     const res = await getIsAuthenticated();
-
-  //     if (res.status !== 200) {
-  //       setIsAuthenticated(false);
-  //     }
-  //   } else {
-  //     setIsAuthenticated(false);
-  //   }
-  // }, [isAuthenticated]);
-  const isAuthenticated = true;
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const user = async () => {
+    const { data } = await userRequest();
+    if (data.email) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  };
+  useEffect(() => {
+    try {
+      const res = user();
+      if (res.status !== 200) {
+        setIsAuthenticated(false);
+      }
+    } catch (e) {
+      setIsAuthenticated(false);
+    }
+  }, []);
   return (
     <Routes>
       <Route path="*" element={<Page404 />} />

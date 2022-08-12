@@ -8226,10 +8226,10 @@ react-fit@^1.0.3:
     prop-types "^15.6.0"
     tiny-warning "^1.0.0"
 
-react-forms-builder-135@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/react-forms-builder-135/-/react-forms-builder-135-1.1.4.tgz#56280a04a93e54d8c158eccd3fad640c061b2dbf"
-  integrity sha512-egepg/2UtT/c6tWLYOeFS6Pwz0shYaK4bg1RODuPsZfJG2mTc1GLOcmBa8Z8BkPCZ6t0BTTeYTDi0YMiRSaYRQ==
+react-forms-builder-135@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-forms-builder-135/-/react-forms-builder-135-1.1.5.tgz#16e169765a13ccaa7165eccf72433ddbd2217d47"
+  integrity sha512-QOK3ihMyWpnEMJUUTadyei+1/lrWITH6cmHarNuRYQo0WsuCqPgE1wQZOS+kMJmWdFib4mTvMrc/i4kfvNkxMA==
   dependencies:
     draft-js "^0.10.5"
     draftjs-to-html "^0.8.4"

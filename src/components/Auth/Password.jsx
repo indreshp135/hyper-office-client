@@ -1,7 +1,6 @@
 import {
   Box, Progress, PasswordInput, Group, Text, Center
 } from '@mantine/core';
-import { useInputState } from '@mantine/hooks';
 import { IconCheck, IconX } from '@tabler/icons';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -41,8 +40,7 @@ function getStrength(password) {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 0);
 }
 
-export function PasswordStrength() {
-  const [value, setValue] = useInputState('');
+export function PasswordStrength({ value, onChange, error }) {
   const strength = getStrength(value);
   const checks = requirements.map((requirement) => (
     <PasswordRequirement
@@ -68,10 +66,11 @@ export function PasswordStrength() {
     <div>
       <PasswordInput
         value={value}
-        onChange={setValue}
+        onChange={onChange}
         placeholder="Your password"
         label="Password"
         required
+        error={error}
       />
 
       <Group spacing={5} grow mt="xs" mb="md">
@@ -83,3 +82,13 @@ export function PasswordStrength() {
     </div>
   );
 }
+
+PasswordStrength.defaultProps = {
+  error: null
+};
+
+PasswordStrength.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  error: PropTypes.string
+};

@@ -1,6 +1,6 @@
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TextInput,
   Title,
@@ -12,10 +12,14 @@ import {
   Stack,
   Container
 } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import { useNavigate } from 'react-router-dom';
 import { PasswordStrength } from './Password';
+import { loginRequest, registerRequest, userRequest } from '../../utils/requests';
 
 export function Auth() {
   const [type, toggle] = useToggle(['login', 'register']);
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
       email: '',
@@ -30,6 +34,74 @@ export function Auth() {
     }
   });
 
+  const [login, setLogin] = useState(false);
+
+  const checkUser = async () => {
+    const { data } = await userRequest();
+    if (data.email) {
+      navigate('/');
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, [login]);
+
+  const submitForm = async () => {
+    if (type === 'login') {
+      try {
+        const response = await loginRequest(form.values.email, form.values.password);
+        if (response.status === 200) {
+          showNotification({
+            type: 'success',
+            title: 'Login successful'
+          });
+          setLogin(true);
+        } else {
+          showNotification({
+            color: 'red',
+            title: 'Login failed',
+            message: response.data.message
+          });
+        }
+      } catch (error) {
+        showNotification({
+          color: 'red',
+          title: 'Login failed',
+          message: error.response.data
+          && error.response.data.message ? error.response.data.message : error.message
+        });
+      }
+    } else {
+      try {
+        const response = await registerRequest(
+          form.values.email,
+          form.values.name,
+          form.values.password
+        );
+        if (response.status === 201) {
+          showNotification({
+            type: 'success',
+            message: 'Registration successful'
+          });
+        } else {
+          showNotification({
+            color: 'red',
+            title: 'Registration failed',
+            message: response.data.message
+          });
+        }
+      } catch (error) {
+        showNotification({
+          color: 'red',
+          title: 'Registration failed',
+          message: error.response.data
+          && error.response.data.message ? error.response.data.message : error.message
+        });
+      }
+    }
+  };
+
   return (
     <Container my={50}>
       <Paper radius="md" shadow="md" p="xl" withBorder>
@@ -40,7 +112,7 @@ export function Auth() {
           Welcome back!
         </Title>
 
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit(() => submitForm())}>
           <Stack>
             {type === 'register' && (
               <TextInput
@@ -60,7 +132,11 @@ export function Auth() {
               error={form.errors.email && 'Invalid email'}
             />
 
-            <PasswordStrength />
+            <PasswordStrength
+              value={form.values.password}
+              onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
+              error={form.errors.password && 'Password should include at least 6 characters'}
+            />
 
             {type === 'register' && (
               <Checkbox
