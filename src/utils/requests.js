@@ -3,7 +3,7 @@ import {
   LOGIN_URL,
   REGISTER_URL,
   LOGOUT_URL,
-  USER_URL
+  USER_URL, CREATE_FORM_URL, GET_FORM_URL
 } from './urls';
 
 // withCredentials
@@ -26,3 +26,14 @@ export const registerRequest = ({ email, username, password }) => axios.post(REG
 export const logoutRequest = () => axios.get(LOGOUT_URL, withCredentials);
 
 export const userRequest = () => axios.get(USER_URL, withCredentials);
+
+export const createFormRequest = (formName, formData) => axios.post(
+  CREATE_FORM_URL,
+  {
+    name: formName,
+    data: formData
+  },
+  withCredentials
+);
+
+export const getFormRequest = (formName) => axios.get(`${GET_FORM_URL}?name=${formName}`, withCredentials);
