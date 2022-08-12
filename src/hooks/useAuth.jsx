@@ -1,15 +1,16 @@
 import React, {
-  createContext, useContext, useMemo, useState
+  createContext, useContext, useMemo
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { showNotification } from '@mantine/notifications';
 import { loginRequest, logoutRequest } from '../utils/requests';
+import { useLocalStorage } from './useLocalStorage';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useLocalStorage('user', null);
   const navigate = useNavigate();
 
   const login = async (data) => {

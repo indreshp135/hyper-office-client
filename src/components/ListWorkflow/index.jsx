@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Container, Paper, SimpleGrid, UnstyledButton, Grid, Button, Title
+  Container, Paper, SimpleGrid, UnstyledButton, Grid, Button, Title, Group
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons';
@@ -18,7 +18,7 @@ function WorkFlows() {
     }
   ]; // Should be fetched from a server
   return (
-    data.map((item) => (
+    data.length ? data.map((item) => (
       <Paper key={item.id} shadow="xl" m={5} p={20} withBorder>
         <Grid>
           <Grid.Col span={8}><Title order={3}>{item.name}</Title></Grid.Col>
@@ -35,6 +35,13 @@ function WorkFlows() {
         </Grid>
       </Paper>
     ))
+      : (
+        <Container my={50}>
+          <Group position="center">
+            <Title order={4}>No Workflows Available</Title>
+          </Group>
+        </Container>
+      )
   );
 }
 

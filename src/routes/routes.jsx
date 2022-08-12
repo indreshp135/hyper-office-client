@@ -9,6 +9,8 @@ import { FormViewer } from '../components/FormViewer';
 import { FileUpload } from '../components/FileUpload';
 import { Workflow } from '../components/Workflow';
 import { ListWorkFlow } from '../components/ListWorkflow';
+import { ListForms } from '../components/ListForms';
+import { DisplayForms } from '../components/DisplayForms';
 
 export const publicRoutes = [
   {
@@ -26,11 +28,26 @@ export const privateRoutes = [
   },
   {
     url: '/formbuilder',
+    component: <GeneralPageContainer child={<ListForms />} />,
+    name: 'FormBuilderContainer'
+  },
+  {
+    url: '/formbuilder/:formId',
+    component: <GeneralPageContainer child={<Formbuilder />} />,
+    name: 'FormBuilderContainer'
+  },
+  {
+    url: '/formbuilder/create',
     component: <GeneralPageContainer child={<Formbuilder />} />,
     name: 'FormBuilderContainer'
   },
   {
     url: '/formviewer',
+    component: <GeneralPageContainer child={<DisplayForms />} />,
+    name: 'FormViewerContainer'
+  },
+  {
+    url: '/formviewer/:formId',
     component: <GeneralPageContainer child={<FormViewer />} />,
     name: 'FormViewerContainer'
   },
