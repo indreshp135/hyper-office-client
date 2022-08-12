@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router, Routes, Route, Navigate
 } from 'react-router-dom';
@@ -6,13 +6,15 @@ import PropTypes from 'prop-types';
 import { publicRoutes, privateRoutes } from './routes';
 import { HeaderNav } from '../components/Header';
 import { Page404 } from '../components/Page404';
-import { userRequest } from '../utils/requests';
+import { AuthProvider, useAuth } from '../hooks/useAuth';
 
 export function Routers() {
   return (
     <Router>
-      <HeaderNav />
-      <Switches />
+      <AuthProvider>
+        <HeaderNav />
+        <Switches />
+      </AuthProvider>
     </Router>
   );
 }
@@ -31,25 +33,7 @@ ProtectedRoute.propTypes = {
 };
 
 function Switches() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const user = async () => {
-    const { data } = await userRequest();
-    if (data.email) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-  };
-  useEffect(() => {
-    try {
-      const res = user();
-      if (res.status !== 200) {
-        setIsAuthenticated(false);
-      }
-    } catch (e) {
-      setIsAuthenticated(false);
-    }
-  }, []);
+  const { user } = useAuth();
   return (
     <Routes>
       <Route path="*" element={<Page404 />} />
@@ -66,7 +50,7 @@ function Switches() {
           path={route.url}
           key={route.url}
           element={(
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute isAuthenticated={!!user}>
               {' '}
               {route.component}
               {' '}

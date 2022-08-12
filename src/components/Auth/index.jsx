@@ -1,6 +1,6 @@
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   TextInput,
   Title,
@@ -15,11 +15,13 @@ import {
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { PasswordStrength } from './Password';
-import { loginRequest, registerRequest, userRequest } from '../../utils/requests';
+import { registerRequest } from '../../utils/requests';
+import { useAuth } from '../../hooks/useAuth';
 
 export function Auth() {
   const [type, toggle] = useToggle(['login', 'register']);
   const navigate = useNavigate();
+  const { login, user } = useAuth();
   const form = useForm({
     initialValues: {
       email: '',
@@ -34,36 +36,16 @@ export function Auth() {
     }
   });
 
-  const [login, setLogin] = useState(false);
-
-  const checkUser = async () => {
-    const { data } = await userRequest();
-    if (data.email) {
+  useEffect(() => {
+    if (user) {
       navigate('/');
     }
-  };
-
-  useEffect(() => {
-    checkUser();
-  }, [login]);
+  }, [user, navigate]);
 
   const submitForm = async () => {
     if (type === 'login') {
       try {
-        const response = await loginRequest(form.values.email, form.values.password);
-        if (response.status === 200) {
-          showNotification({
-            type: 'success',
-            title: 'Login successful'
-          });
-          setLogin(true);
-        } else {
-          showNotification({
-            color: 'red',
-            title: 'Login failed',
-            message: response.data.message
-          });
-        }
+        login(form.values);
       } catch (error) {
         showNotification({
           color: 'red',
@@ -75,9 +57,7 @@ export function Auth() {
     } else {
       try {
         const response = await registerRequest(
-          form.values.email,
-          form.values.name,
-          form.values.password
+          form.values
         );
         if (response.status === 201) {
           showNotification({

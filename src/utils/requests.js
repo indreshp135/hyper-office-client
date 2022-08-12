@@ -12,12 +12,12 @@ const withCredentials = {
 };
 
 // auth requests
-export const loginRequest = (email, password) => axios.post(LOGIN_URL, {
+export const loginRequest = ({ email, password }) => axios.post(LOGIN_URL, {
   email,
   password
 }, withCredentials);
 
-export const registerRequest = (email, username, password) => axios.post(REGISTER_URL, {
+export const registerRequest = ({ email, username, password }) => axios.post(REGISTER_URL, {
   email,
   password,
   username

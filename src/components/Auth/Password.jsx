@@ -71,6 +71,7 @@ export function PasswordStrength({ value, onChange, error }) {
         label="Password"
         required
         error={error}
+        autoComplete="off"
       />
 
       <Group spacing={5} grow mt="xs" mb="md">

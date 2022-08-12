@@ -6,12 +6,10 @@ import {
   IconLogout
 } from '@tabler/icons';
 import {
-  Link, useLocation, useNavigate
+  Link, useLocation
 } from 'react-router-dom';
-
-import { showNotification } from '@mantine/notifications';
+import { useAuth } from '../../hooks/useAuth';
 import { navLinks } from '../../routes/navLinks';
-import { logoutRequest } from '../../utils/requests';
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -69,40 +67,16 @@ export function NavBar() {
   const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState('Home');
-  const navigate = useNavigate();
 
   useEffect(() => {
     setActive(location.pathname);
   }, [location]);
 
-  const logout = async () => {
-    try {
-      const response = await logoutRequest();
-      if (response.status === 200) {
-        navigate('/auth');
-        showNotification({
-          title: 'Logout successful'
-        });
-      } else {
-        showNotification({
-          color: 'red',
-          title: 'Logout failed',
-          message: response.data.message
-        });
-      }
-    } catch (error) {
-      showNotification({
-        color: 'red',
-        title: 'Logout failed',
-        message: error.response.data
-        && error.response.data.message ? error.response.data.message : error.message
-      });
-    }
-  };
+  const { logout } = useAuth();
 
   const links = navLinks.map((item) => (
     <Link
-      className={cx(classes.link, { [classes.linkActive]: active.includes(item.link) })}
+      className={cx(classes.link, { [classes.linkActive]: (active.includes(item.link) && item.link !== '/') || item.link === active })}
       to={item.link}
       key={item.label}
       onClick={() => {
