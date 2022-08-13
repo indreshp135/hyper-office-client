@@ -66,7 +66,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-export function NavBar({ opened }) {
+export function NavBar({ opened, setOpened }) {
   const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState('Home');
@@ -85,6 +85,7 @@ export function NavBar({ opened }) {
       to={item.link}
       key={item.label}
       onClick={() => {
+        setOpened(false);
         setActive(item.link);
       }}
     >
@@ -119,5 +120,6 @@ export function NavBar({ opened }) {
 }
 
 NavBar.propTypes = {
-  opened: PropTypes.bool.isRequired
+  opened: PropTypes.bool.isRequired,
+  setOpened: PropTypes.func.isRequired
 };

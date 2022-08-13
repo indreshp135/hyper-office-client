@@ -19,7 +19,7 @@ export function GeneralPageContainer({ child }) {
       }}
       navbarOffsetBreakpoint="xs"
       navbar={
-        <NavBar opened={opened} />
+        <NavBar opened={opened} setOpened={setOpened} />
       }
       header={
         <HeaderNav opened={opened} setOpened={setOpened} />
