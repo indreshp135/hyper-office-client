@@ -50,4 +50,5 @@ jobs:
             git checkout .
             git fetch origin prod
             git reset --hard origin/prod
+            yarn install
             yarn run build
