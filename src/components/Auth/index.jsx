@@ -18,11 +18,13 @@ import { PasswordStrength } from './Password';
 import { registerRequest } from '../../utils/requests';
 import { useAuth } from '../../hooks/useAuth';
 import { HeaderNav } from '../Header';
+import { useLoading } from '../../hooks/useLoading';
 
 export function Auth() {
   const [type, toggle] = useToggle(['login', 'register']);
   const navigate = useNavigate();
   const { login, user } = useAuth();
+  const { request } = useLoading();
   const form = useForm({
     initialValues: {
       email: '',
@@ -57,9 +59,9 @@ export function Auth() {
       }
     } else {
       try {
-        const response = await registerRequest(
+        const response = await request(() => registerRequest(
           form.values
-        );
+        ));
         if (response.status === 201) {
           showNotification({
             type: 'success',

@@ -5,6 +5,7 @@ import {
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { getAllFormsRequest } from '../../utils/requests';
+import { useLoading } from '../../hooks/useLoading';
 
 const useStyles = createStyles((theme) => ({
 
@@ -38,9 +39,10 @@ export function DisplayForms() {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const { request, isLoading } = useLoading();
   const getAllForms = async () => {
     try {
-      const response = await getAllFormsRequest();
+      const response = await request(getAllFormsRequest);
       if (response.status === 200) {
         setData(response.data);
       } else {
@@ -88,17 +90,19 @@ export function DisplayForms() {
         ))}
       </Grid>
     ) : (
-      <Container my={50}>
-        <Group position="center">
-          <Title order={4}>No Form Available</Title>
-        </Group>
-      </Container>
+      !isLoading && (
+        <Container my={50}>
+          <Group position="center">
+            <Title order={4}>No Form Available</Title>
+          </Group>
+        </Container>
+      )
     );
 
   return (
     <Container my={50}>
       <Group position="center">
-        <Title className={classes.title}>Forms</Title>
+        <Title className={classes.title}>Fill Forms</Title>
       </Group>
       {items}
     </Container>

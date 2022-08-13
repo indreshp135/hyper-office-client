@@ -1,5 +1,6 @@
 const theme = {
-  primaryColor: 'teal'
+  primaryColor: 'teal',
+  loader: 'bars'
 };
 
 export default theme;

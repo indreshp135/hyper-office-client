@@ -3,14 +3,18 @@ import {
   BrowserRouter as Router, Routes, Route, Navigate
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { LoadingOverlay } from '@mantine/core';
 import { publicRoutes, privateRoutes } from './routes';
 import { Page404 } from '../components/Page404';
 import { AuthProvider, useAuth } from '../hooks/useAuth';
+import { useLoading } from '../hooks/useLoading';
 
 export function Routers() {
+  const { isLoading } = useLoading();
   return (
     <Router>
       <AuthProvider>
+        <LoadingOverlay visible={isLoading} />
         <Switches />
       </AuthProvider>
     </Router>

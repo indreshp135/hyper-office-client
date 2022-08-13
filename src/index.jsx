@@ -5,6 +5,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { Routers } from './routes';
 import theme from './utils/theme';
 import * as serviceWorker from './serviceWorker';
+import { LoadingProvider } from './hooks/useLoading';
 
 function App() {
   const [colorScheme, setColorScheme] = useState('light');
@@ -19,7 +20,9 @@ function App() {
         }}
       >
         <NotificationsProvider>
-          <Routers />
+          <LoadingProvider>
+            <Routers />
+          </LoadingProvider>
         </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>

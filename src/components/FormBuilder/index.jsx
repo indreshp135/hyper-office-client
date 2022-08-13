@@ -6,15 +6,17 @@ import {
 } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { createFormRequest, getFormRequest, updateFormRequest } from '../../utils/requests';
+import { useLoading } from '../../hooks/useLoading';
 
 export function Formbuilder() {
   const [name, setName] = useState('');
   const { formId } = useParams();
+  const { request } = useLoading();
 
   const [formData, setFormData] = useState([]);
   const createForm = async (formItem) => {
     try {
-      const response = await createFormRequest(name, formItem);
+      const response = await request(() => createFormRequest(name, formItem));
       if (response.status === 200) {
         showNotification({
           type: 'success',
@@ -39,7 +41,7 @@ export function Formbuilder() {
 
   const updateForm = async (formItem) => {
     try {
-      const response = await updateFormRequest({ id: formId, data: formItem, name });
+      const response = await request(() => updateFormRequest({ id: formId, data: formItem, name }));
       if (response.status === 200) {
         showNotification({
           type: 'success',
@@ -64,7 +66,7 @@ export function Formbuilder() {
 
   const getForm = async () => {
     try {
-      const response = await getFormRequest(formId);
+      const response = await request(() => getFormRequest(formId));
       if (response.data && response.data.data) {
         setFormData(JSON.parse(response.data.data));
         setName(response.data.name);

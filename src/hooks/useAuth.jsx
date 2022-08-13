@@ -6,18 +6,20 @@ import PropTypes from 'prop-types';
 import { showNotification } from '@mantine/notifications';
 import { loginRequest, logoutRequest, userRequest } from '../utils/requests';
 import { useLocalStorage } from './useLocalStorage';
+import { useLoading } from './useLoading';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useLocalStorage('user', null);
   const navigate = useNavigate();
+  const { request } = useLoading();
 
   const login = async (data) => {
     try {
-      const response = await loginRequest(data);
+      const response = await request(() => loginRequest(data));
       if (response.status === 200) {
-        const res = await userRequest();
+        const res = await request(userRequest);
         setUser(res.data);
         showNotification({
           title: 'Login successful'
@@ -42,7 +44,7 @@ export function AuthProvider({ children }) {
 
   const logout = async () => {
     try {
-      const response = await logoutRequest();
+      const response = await request(logoutRequest);
       if (response.status === 200) {
         navigate('/auth');
         showNotification({

@@ -4,14 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { FormGenerator } from 'react-forms-builder-135';
 import { useParams } from 'react-router-dom';
 import { getFormRequest } from '../../utils/requests';
+import { useLoading } from '../../hooks/useLoading';
 
 export function FormViewer() {
   const { formId } = useParams();
   const [formData, setFormData] = useState({});
+  const { request } = useLoading();
 
   const getForm = async () => {
     try {
-      const response = await getFormRequest(formId);
+      const response = await request(() => getFormRequest(formId));
       if (response.data && response.data.data) {
         setFormData(JSON.parse(response.data.data));
       } else {

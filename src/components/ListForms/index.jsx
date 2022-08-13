@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container, Paper, SimpleGrid, UnstyledButton, Grid, Button, Title, Group
+  Container, Paper, SimpleGrid, UnstyledButton, Grid, Button, Title, Group, Center
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons';
 import { showNotification } from '@mantine/notifications';
+import { useLoading } from '../../hooks/useLoading';
 import { getAllFormsRequest, deleteFormRequest } from '../../utils/requests';
 
 function WorkFlows() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+
+  const { request, isLoading } = useLoading();
   const getAllForms = async () => {
     try {
-      const response = await getAllFormsRequest();
+      const response = await request(getAllFormsRequest);
       if (response.status === 200) {
         setData(response.data);
       } else {
@@ -38,7 +41,7 @@ function WorkFlows() {
 
   const deleteForm = async (id) => {
     try {
-      const response = await deleteFormRequest({ id });
+      const response = await request(() => deleteFormRequest({ id }));
       if (response.status === 200) {
         showNotification({
           color: 'green',
@@ -82,11 +85,13 @@ function WorkFlows() {
       </Paper>
     ))
       : (
-        <Container my={50}>
-          <Group position="center">
-            <Title order={4}>No Form Available</Title>
-          </Group>
-        </Container>
+        !isLoading && (
+          <Container my={50}>
+            <Group position="center">
+              <Title order={4}>No Form Available</Title>
+            </Group>
+          </Container>
+        )
       )
   );
 }
@@ -95,6 +100,7 @@ export function ListForms() {
   const navigate = useNavigate();
   return (
     <Container my={50}>
+      <Center><Title order={2}>Create/Edit Forms</Title></Center>
       <div style={{
         display: 'flex',
         justifyContent: 'flex-end'

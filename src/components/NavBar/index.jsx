@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  createStyles, Navbar, UnstyledButton
+  createStyles, Navbar, UnstyledButton,
+  ActionIcon,
+  useMantineColorScheme, Center
 } from '@mantine/core';
 import {
-  IconLogout
+  IconLogout,
+  IconSun, IconMoonStars
 } from '@tabler/icons';
 import {
   Link, useLocation
@@ -69,7 +72,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
 export function NavBar({ opened, setOpened }) {
   const location = useLocation();
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState('Home');
+  const [active, setActive] = useState('/');
+
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   const { user } = useAuth();
 
@@ -107,6 +112,21 @@ export function NavBar({ opened, setOpened }) {
       <Navbar.Section grow>
         {links}
       </Navbar.Section>
+      {opened && (
+        <Center>
+          <ActionIcon
+            onClick={() => toggleColorScheme()}
+            size="lg"
+            sx={(theme) => ({
+              backgroundColor:
+            theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+              color: theme.colorScheme === 'dark' ? theme.colors.yellow[4] : theme.colors.blue[6]
+            })}
+          >
+            {colorScheme !== 'dark' ? <IconSun size={18} /> : <IconMoonStars size={18} />}
+          </ActionIcon>
+        </Center>
+      )}
 
       <Navbar.Section className={classes.footer}>
         <UserInfo name={user.name} email={user.email} />
