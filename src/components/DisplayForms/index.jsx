@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  createStyles, Text, SimpleGrid, Button, Group, Container, Title
+  createStyles, Text, Grid, Button, Group, Container, Title
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
@@ -21,9 +21,10 @@ const useStyles = createStyles((theme) => ({
     textAlign: 'center',
     borderRadius: theme.radius.md,
     height: 90,
+    width: '100%',
     transition: 'box-shadow 150ms ease, transform 100ms ease',
     boxShadow: theme.shadows.md,
-
+    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.white,
     '&:hover': {
       boxShadow: `${theme.shadows.xl} !important`,
       transform: 'scale(1.05)'
@@ -65,24 +66,27 @@ export function DisplayForms() {
   const items = data.length
 
     ? (
-      <SimpleGrid cols={3} mt="md" shadows="xl">
+      <Grid gutter="xl" grow mt="md" justify="center">
         {data.map((item) => (
-          <Button
-            variant="light"
+          <Grid.Col
             key={item.id}
-            className={classes.item}
-            onClick={() => navigate(`./${item.id}`)}
+            md={6}
+            lg={4}
           >
-            <Text
-              size="xs"
-              mt={7}
+            <Button
+              variant="light"
+              className={classes.item}
+              onClick={() => navigate(`./${item.id}`)}
             >
-              {item.name}
-            </Text>
-          </Button>
-
+              <Text
+                size="xs"
+              >
+                {item.name}
+              </Text>
+            </Button>
+          </Grid.Col>
         ))}
-      </SimpleGrid>
+      </Grid>
     ) : (
       <Container my={50}>
         <Group position="center">

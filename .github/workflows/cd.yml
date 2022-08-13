@@ -30,25 +30,24 @@ jobs:
       - name: Build
         run: |
           cp src/config.example.js src/config.js
-          yarn run lint
+          yarn run format
           yarn run build
 
-  # deploy:
-  #   name: deploy
-  #   needs: [IntegrationTest]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: deploy
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host:
-  #         port: 22
-  #         username:
-  #         password: ${{ secrets.SSH_KEY }}
-  #         script: |
-  #           cd ${{ github.workflow.inputs.repository }}
-  #           git checkout .
-  #           git fetch origin prod
-  #           git reset --hard origin/prod
-  #           docker-compose down
-  #           docker-compose up --build -d
+  deploy:
+    name: deploy
+    needs: [IntegrationTest]
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: 20.232.127.81
+          port: 22
+          username: indresh
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ./SIH/hyper-office-client
+            git checkout .
+            git fetch origin prod
+            git reset --hard origin/prod
+            yarn run build

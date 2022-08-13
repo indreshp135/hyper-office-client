@@ -8,8 +8,10 @@ import {
 import {
   Link, useLocation
 } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { useAuth } from '../../hooks/useAuth';
 import { navLinks } from '../../routes/navLinks';
+import { UserInfo } from './UserInfo';
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -33,6 +35,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
       padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
+      width: '100%',
 
       '&:hover': {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
@@ -63,10 +66,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-export function NavBar() {
+export function NavBar({ opened }) {
   const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState('Home');
+
+  const { user } = useAuth();
 
   useEffect(() => {
     setActive(location.pathname);
@@ -89,12 +94,13 @@ export function NavBar() {
   ));
 
   return (
-    <Navbar height={window.innerHeight - 80} p="md">
+    <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 260 }}>
       <Navbar.Section grow>
         {links}
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
+        <UserInfo name={user.name} email={user.email} />
         <UnstyledButton className={classes.link} onClick={logout}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
@@ -103,3 +109,7 @@ export function NavBar() {
     </Navbar>
   );
 }
+
+NavBar.propTypes = {
+  opened: PropTypes.bool.isRequired
+};

@@ -1,23 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Grid, ScrollArea
+  AppShell,
+  useMantineTheme, ScrollArea
 } from '@mantine/core';
 import PropTypes from 'prop-types';
 import { NavBar } from '../components/NavBar';
+import { HeaderNav } from '../components/Header';
 
 export function GeneralPageContainer({ child }) {
+  const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
   return (
-    <Grid>
-      <Grid.Col span={2}>
-        <NavBar />
-      </Grid.Col>
-      <Grid.Col span={10}>
-
-        <ScrollArea style={{ height: window.innerHeight - 80 }}>
-          {child}
-        </ScrollArea>
-      </Grid.Col>
-    </Grid>
+    <AppShell
+      styles={{
+        main: {
+          background: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[1]
+        }
+      }}
+      navbarOffsetBreakpoint="xs"
+      navbar={
+        <NavBar opened={opened} />
+      }
+      header={
+        <HeaderNav opened={opened} setOpened={setOpened} />
+      }
+    >
+      <ScrollArea style={{ height: window.innerHeight - 120 }}>
+        {child}
+      </ScrollArea>
+    </AppShell>
   );
 }
 

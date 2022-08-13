@@ -28,5 +28,5 @@ jobs:
       - name: Build
         run: |
           cp src/config.example.js src/config.js
-          yarn run lint
+          yarn run format
           yarn run build

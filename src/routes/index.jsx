@@ -4,7 +4,6 @@ import {
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { publicRoutes, privateRoutes } from './routes';
-import { HeaderNav } from '../components/Header';
 import { Page404 } from '../components/Page404';
 import { AuthProvider, useAuth } from '../hooks/useAuth';
 
@@ -12,7 +11,6 @@ export function Routers() {
   return (
     <Router>
       <AuthProvider>
-        <HeaderNav />
         <Switches />
       </AuthProvider>
     </Router>

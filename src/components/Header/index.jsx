@@ -1,17 +1,18 @@
 import React from 'react';
 import {
   createStyles, Header, Container, Group, UnstyledButton, Text, Center,
-  useMantineColorScheme, Burger, Paper, Transition
+  useMantineColorScheme, Burger, Paper, MediaQuery, useMantineTheme
 } from '@mantine/core';
-import { upperFirst, useDisclosure } from '@mantine/hooks';
+import { upperFirst } from '@mantine/hooks';
 import { MantineLogo } from '@mantine/ds';
 import { IconMoon, IconSun } from '@tabler/icons';
+import PropTypes from 'prop-types';
 
 const HEADER_HEIGHT = 80;
 
 const useStyles = createStyles((theme) => ({
   root: {
-    position: 'relative',
+    position: 'fixed',
     zIndex: 1
   },
 
@@ -102,11 +103,12 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export function HeaderNav() {
+export function HeaderNav({ opened: open, setOpened }) {
   const { classes } = useStyles();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const Icon = colorScheme === 'dark' ? IconMoon : IconSun;
-  const [opened, { toggle }] = useDisclosure(false);
+
+  const theme = useMantineTheme();
 
   const items = (
     <UnstyledButton
@@ -128,23 +130,33 @@ export function HeaderNav() {
   );
 
   return (
-    <Header height={HEADER_HEIGHT} className={classes.root}>
+    <Header height={HEADER_HEIGHT} className={classes.root} p="md">
       <Container className={classes.header}>
         <MantineLogo size={28} />
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-        <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
-
-        <Transition transition="pop-top-right" duration={200} mounted={opened}>
-          {(styles) => (
-            <Paper className={classes.dropdown} withBorder style={styles}>
-              {items}
-            </Paper>
-          )}
-        </Transition>
-
+        {open
+        && (
+          <Paper className={classes.dropdown} withBorder>
+            {items}
+          </Paper>
+        ) }
+        <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+          <Burger
+            opened={open}
+            onClick={() => setOpened((o) => !o)}
+            size="sm"
+            color={theme.colors.gray[6]}
+            mr="xl"
+          />
+        </MediaQuery>
       </Container>
     </Header>
   );
 }
+
+HeaderNav.propTypes = {
+  opened: PropTypes.bool.isRequired,
+  setOpened: PropTypes.func.isRequired
+};

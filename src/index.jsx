@@ -4,6 +4,7 @@ import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { Routers } from './routes';
 import theme from './utils/theme';
+import * as serviceWorker from './serviceWorker';
 
 function App() {
   const [colorScheme, setColorScheme] = useState('light');
@@ -29,3 +30,5 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <App />
 );
+
+serviceWorker.register();
