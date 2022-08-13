@@ -4,7 +4,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { showNotification } from '@mantine/notifications';
-import { loginRequest, logoutRequest } from '../utils/requests';
+import { loginRequest, logoutRequest, userRequest } from '../utils/requests';
 import { useLocalStorage } from './useLocalStorage';
 
 const AuthContext = createContext();
@@ -17,7 +17,8 @@ export function AuthProvider({ children }) {
     try {
       const response = await loginRequest(data);
       if (response.status === 200) {
-        setUser(data);
+        const res = await userRequest();
+        setUser(res.data);
         showNotification({
           title: 'Login successful'
         });

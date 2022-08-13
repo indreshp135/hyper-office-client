@@ -94,7 +94,15 @@ export function NavBar({ opened }) {
   ));
 
   return (
-    <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 260 }}>
+    <Navbar
+      p="md"
+      hiddenBreakpoint="sm"
+      hidden={!opened}
+      width={{ sm: 260 }}
+      style={{
+        zIndex: 1
+      }}
+    >
       <Navbar.Section grow>
         {links}
       </Navbar.Section>
