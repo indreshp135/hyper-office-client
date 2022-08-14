@@ -6,6 +6,7 @@ import { Routers } from './routes';
 import theme from './utils/theme';
 import * as serviceWorker from './serviceWorker';
 import { LoadingProvider } from './hooks/useLoading';
+import './utils/i18n';
 
 function App() {
   const [colorScheme, setColorScheme] = useState('light');

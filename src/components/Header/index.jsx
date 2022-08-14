@@ -3,10 +3,10 @@ import {
   createStyles, Header, Container, Group, UnstyledButton, Text, Center,
   useMantineColorScheme, Burger, Paper, MediaQuery, useMantineTheme
 } from '@mantine/core';
-import { upperFirst } from '@mantine/hooks';
 import { MantineLogo } from '@mantine/ds';
 import { IconMoon, IconSun } from '@tabler/icons';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const HEADER_HEIGHT = 80;
 
@@ -107,6 +107,7 @@ export function HeaderNav({ opened: open, setOpened }) {
   const { classes } = useStyles();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const Icon = colorScheme === 'dark' ? IconMoon : IconSun;
+  const { t } = useTranslation();
 
   const theme = useMantineTheme();
 
@@ -118,9 +119,7 @@ export function HeaderNav({ opened: open, setOpened }) {
       title="Ctrl + J"
     >
       <Text size="sm" className={classes.value}>
-        {upperFirst(colorScheme === 'light' ? 'light' : 'dark')}
-        {' '}
-        theme
+        {t(`${colorScheme}Theme`)}
       </Text>
 
       <Center className={classes.iconWrapper}>

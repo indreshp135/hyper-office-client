@@ -55,3 +55,8 @@ body {
     background: #50aceedd;
   }
 }
+
+html,
+body {
+  overscroll-behavior-y: contain;
+}

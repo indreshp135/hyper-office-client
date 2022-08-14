@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   createStyles, Navbar, UnstyledButton,
   ActionIcon,
-  useMantineColorScheme, Center
+  useMantineColorScheme, Center, Select
 } from '@mantine/core';
 import {
   IconLogout,
@@ -12,9 +12,11 @@ import {
   Link, useLocation
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
 import { navLinks } from '../../routes/navLinks';
 import { UserInfo } from './UserInfo';
+import { languages } from '../../utils/lng';
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -65,6 +67,19 @@ const useStyles = createStyles((theme, _params, getRef) => {
           color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color
         }
       }
+    },
+    input: {
+      height: 'auto',
+      paddingTop: 18
+    },
+
+    label: {
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: theme.fontSizes.xs,
+      paddingLeft: theme.spacing.sm,
+      paddingTop: theme.spacing.sm / 2,
+      zIndex: 1
     }
   };
 });
@@ -73,6 +88,7 @@ export function NavBar({ opened, setOpened }) {
   const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState('/');
+  const { i18n, t } = useTranslation();
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
@@ -95,7 +111,7 @@ export function NavBar({ opened, setOpened }) {
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span>{item.label}</span>
+      <span>{t(item.label)}</span>
     </Link>
   ));
 
@@ -128,11 +144,26 @@ export function NavBar({ opened, setOpened }) {
         </Center>
       )}
 
+      <Select
+        style={{ marginTop: 20, zIndex: 2 }}
+        data={languages.map((item) => ({
+          value: item.code,
+          label: item.name
+        }))}
+        placeholder="Pick one"
+        label={t('selectLanguage')}
+        classNames={classes}
+        onChange={(value) => {
+          i18n.changeLanguage(value);
+        }}
+        value={i18n.language}
+      />
+
       <Navbar.Section className={classes.footer}>
         <UserInfo name={user.name} email={user.email} />
         <UnstyledButton className={classes.link} onClick={logout}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
+          <span>{t('logout')}</span>
         </UnstyledButton>
       </Navbar.Section>
     </Navbar>

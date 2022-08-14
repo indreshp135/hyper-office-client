@@ -7,6 +7,7 @@ import {
   createStyles
 } from '@mantine/core';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -25,6 +26,7 @@ export function UserInfo({
   name, email
 }) {
   const { classes } = useStyles();
+  const { t } = useTranslation();
 
   return (
     <UnstyledButton className={classes.user}>
@@ -33,7 +35,7 @@ export function UserInfo({
 
         <div style={{ flex: 1 }}>
           <Text size="xs" sx={{ textTransform: 'uppercase' }} weight={700} color="dimmed">
-            Administrator
+            {t('administrator')}
           </Text>
           <Text size="sm" weight={500}>
             {name}

@@ -14,6 +14,7 @@ import {
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PasswordStrength } from './Password';
 import { registerRequest } from '../../utils/requests';
 import { useAuth } from '../../hooks/useAuth';
@@ -21,6 +22,7 @@ import { HeaderNav } from '../Header';
 import { useLoading } from '../../hooks/useLoading';
 
 export function Auth() {
+  const { t } = useTranslation();
   const [type, toggle] = useToggle(['login', 'register']);
   const navigate = useNavigate();
   const { login, user } = useAuth();
@@ -94,7 +96,7 @@ export function Auth() {
             align="center"
             sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
           >
-            {upperFirst(type)}
+            {t(`${type}`)}
           </Title>
 
           <form onSubmit={form.onSubmit(() => submitForm())}>

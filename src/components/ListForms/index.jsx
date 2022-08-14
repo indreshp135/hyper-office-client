@@ -100,7 +100,7 @@ export function ListForms() {
   const navigate = useNavigate();
   return (
     <Container my={50}>
-      <Center><Title order={2}>Create/Edit Forms</Title></Center>
+      <Center><Title>Create/Edit Forms</Title></Center>
       <div style={{
         display: 'flex',
         justifyContent: 'flex-end'
