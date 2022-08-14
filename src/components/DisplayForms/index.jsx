@@ -4,6 +4,7 @@ import {
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getAllFormsRequest } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 
@@ -36,6 +37,7 @@ const useStyles = createStyles((theme) => ({
 // const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'];
 
 export function DisplayForms() {
+  const { t } = useTranslation();
   const { classes } = useStyles();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -93,7 +95,7 @@ export function DisplayForms() {
       !isLoading && (
         <Container my={50}>
           <Group position="center">
-            <Title order={4}>No Form Available</Title>
+            <Title order={4}>{t('noFormAvailable')}</Title>
           </Group>
         </Container>
       )
@@ -102,7 +104,7 @@ export function DisplayForms() {
   return (
     <Container my={50}>
       <Group position="center">
-        <Title className={classes.title}>Fill Forms</Title>
+        <Title className={classes.title}>{t('fillForms')}</Title>
       </Group>
       {items}
     </Container>

@@ -5,26 +5,26 @@ export const languages = [
   },
   {
     code: 'hi',
-    name: 'Hindi'
+    name: 'हिन्दी'
   },
   {
     code: 'ml',
-    name: 'Malayalam'
+    name: 'മലയാളം'
   },
   {
     code: 'bn',
-    name: 'Bengali'
+    name: 'বাংলা'
   },
   {
     code: 'te',
-    name: 'Telugu'
+    name: 'తెలుగు'
   },
   {
     code: 'kn',
-    name: 'Kannada'
+    name: 'ಕನ್ನಡ'
   },
   {
     code: 'ta',
-    name: 'Tamil'
+    name: 'தமிழ்'
   }
 ];

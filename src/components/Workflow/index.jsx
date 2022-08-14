@@ -9,6 +9,7 @@ import { IconPlus } from '@tabler/icons';
 import { showNotification } from '@mantine/notifications';
 
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { DndList } from './DndList';
 
 const styles = createStyles((theme) => ({
@@ -65,14 +66,15 @@ export function Workflow() {
 
   // useEffect and fetch data from server
 
+  const { t } = useTranslation();
+
   return (
     <>
       <Container my={50}>
         <Paper shadow="xl" radius="md" p="xl" withBorder>
           <Center>
             <Title>
-              {id ? 'Edit the ' : 'Create a '}
-              Workflow
+              {id ? t('editWorkflow') : t('createWorkflow')}
             </Title>
 
           </Center>
@@ -103,7 +105,7 @@ export function Workflow() {
               message: JSON.stringify({ name, state })
             })}
           >
-            Submit Workflow
+            {t('submitWorkflow')}
           </Button>
         </Center>
       </Container>

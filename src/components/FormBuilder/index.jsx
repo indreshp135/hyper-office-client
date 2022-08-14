@@ -5,10 +5,12 @@ import {
   Center, Container, TextInput, Title
 } from '@mantine/core';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { createFormRequest, getFormRequest, updateFormRequest } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 
 export function Formbuilder() {
+  const { t } = useTranslation();
   const [name, setName] = useState('');
   const { formId } = useParams();
   const { request } = useLoading();
@@ -95,7 +97,7 @@ export function Formbuilder() {
 
   return (
     <Container my={50}>
-      <Center><Title mb={30}>{formId ? 'Update Form' : 'Create Form'}</Title></Center>
+      <Center><Title mb={30}>{t('createEditForms')}</Title></Center>
       <TextInput label="Form Name" required value={name} onChange={(event) => setName(event.currentTarget.value)} />
       <FormBuilder
         formItems={

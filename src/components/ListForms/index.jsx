@@ -5,12 +5,14 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons';
 import { showNotification } from '@mantine/notifications';
+import { useTranslation } from 'react-i18next';
 import { useLoading } from '../../hooks/useLoading';
 import { getAllFormsRequest, deleteFormRequest } from '../../utils/requests';
 
 function WorkFlows() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const { t } = useTranslation();
 
   const { request, isLoading } = useLoading();
   const getAllForms = async () => {
@@ -88,7 +90,7 @@ function WorkFlows() {
         !isLoading && (
           <Container my={50}>
             <Group position="center">
-              <Title order={4}>No Form Available</Title>
+              <Title order={4}>{t('noFormAvailable')}</Title>
             </Group>
           </Container>
         )
@@ -98,15 +100,16 @@ function WorkFlows() {
 
 export function ListForms() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <Container my={50}>
-      <Center><Title>Create/Edit Forms</Title></Center>
+      <Center><Title>{t('createEditForms')}</Title></Center>
       <div style={{
         display: 'flex',
         justifyContent: 'flex-end'
       }}
       >
-        <Button m={10} variant="outline" onClick={() => navigate('./create')}>Create New Form</Button>
+        <Button m={10} variant="outline" onClick={() => navigate('./create')}>{t('createNewForm')}</Button>
       </div>
       <SimpleGrid cols={1}>
         <WorkFlows />

@@ -4,9 +4,11 @@ import {
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { IconEdit, IconTrash } from '@tabler/icons';
+import { useTranslation } from 'react-i18next';
 
 function WorkFlows() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const data = [
     {
       id: 1,
@@ -38,7 +40,7 @@ function WorkFlows() {
       : (
         <Container my={50}>
           <Group position="center">
-            <Title order={4}>No Workflows Available</Title>
+            <Title order={4}>{t('noWorkflowAvailable')}</Title>
           </Group>
         </Container>
       )
@@ -47,6 +49,7 @@ function WorkFlows() {
 
 export function ListWorkFlow() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <Container my={50}>
       <div style={{
@@ -54,7 +57,7 @@ export function ListWorkFlow() {
         justifyContent: 'flex-end'
       }}
       >
-        <Button m={10} variant="outline" onClick={() => navigate('./create')}>Create Workflow</Button>
+        <Button m={10} variant="outline" onClick={() => navigate('./create')}>{t('createWorkflow')}</Button>
       </div>
       <SimpleGrid cols={1}>
         <WorkFlows />
