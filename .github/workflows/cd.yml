@@ -52,7 +52,3 @@ jobs:
             git reset --hard origin/prod
             yarn install
             yarn run build
-            cd build
-            mkdir .well-known
-            cd .well-known
-            cat ${{ secrets.ASSETLINKS_KEY }} > assetlinks.json

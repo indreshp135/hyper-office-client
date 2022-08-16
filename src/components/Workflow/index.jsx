@@ -11,6 +11,7 @@ import { showNotification } from '@mantine/notifications';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DndList } from './DndList';
+import { roles } from '../../utils/roles';
 
 const styles = createStyles((theme) => ({
   root: {
@@ -43,7 +44,6 @@ export function Workflow() {
   const { id } = useParams();
 
   const [opened, setOpened] = useState(false);
-  const designations = ['Des1', 'Des2', 'Des3']; // Should be fetched from a server
   const [state, handlers] = useListState([]);
 
   const [status, setStatus] = useState('');
@@ -129,7 +129,7 @@ export function Workflow() {
           />
           <Select
             style={{ marginTop: 20, zIndex: 2 }}
-            data={designations}
+            data={roles}
             placeholder="Select a designation"
             label="Designation of person to process"
             classNames={classes}

@@ -11,6 +11,7 @@ import { Workflow } from '../components/Workflow';
 import { ListWorkFlow } from '../components/ListWorkflow';
 import { ListForms } from '../components/ListForms';
 import { DisplayForms } from '../components/DisplayForms';
+import { SetRoles } from '../components/SetRole';
 
 export const publicRoutes = [
   {
@@ -70,5 +71,10 @@ export const privateRoutes = [
     url: '/workflow/create',
     component: <GeneralPageContainer child={<Workflow />} />,
     name: 'WorkflowContainer'
+  },
+  {
+    url: '/setroles',
+    component: <GeneralPageContainer child={<SetRoles />} />,
+    name: 'SetRolesContainer'
   }
 ];
