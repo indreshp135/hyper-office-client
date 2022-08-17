@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   createStyles, Select, TextInput, Container, Title, Center, Button
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { showNotification } from '@mantine/notifications';
-import { roles } from '../../utils/roles';
+import { getRolesRequest, setRolesRequest } from '../../utils/requests';
+import { useLoading } from '../../hooks/useLoading';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -28,9 +29,63 @@ const useStyles = createStyles((theme) => ({
 
 export function SetRoles() {
   const { classes } = useStyles();
-  const [role, setRole] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
   const { t } = useTranslation();
+  const [roles, setRoles] = useState([]);
+
+  const { request } = useLoading();
+  const getAllRoles = async () => {
+    try {
+      const response = await request(getRolesRequest);
+      if (response.status === 200) {
+        setRoles(response.data);
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching data',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error while fetching data',
+        message: error.response.data
+                && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAllRoles();
+  }, []);
+
+  const postRoles = async () => {
+    try {
+      const response = await request(() => setRolesRequest({ email, role }));
+      if (response.status === 200) {
+        showNotification({
+          title: 'Successful in setting the role'
+        });
+        setRole('');
+        setEmail('');
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error setting role',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error setting role',
+        message: error.response.data
+                && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
 
   return (
     <Container my={50}>
@@ -52,12 +107,7 @@ export function SetRoles() {
       <Center>
         <Button
           style={{ marginTop: 20 }}
-          onClick={() => {
-            showNotification({
-              message: `${email} has been set to ${role}`,
-              type: 'success'
-            });
-          }}
+          onClick={postRoles}
         >
           Set Role
         </Button>

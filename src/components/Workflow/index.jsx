@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container, Paper, Title, Center, Button,
   createStyles, TextInput, Select,
@@ -11,7 +11,8 @@ import { showNotification } from '@mantine/notifications';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DndList } from './DndList';
-import { roles } from '../../utils/roles';
+import { getRolesRequest } from '../../utils/requests';
+import { useLoading } from '../../hooks/useLoading';
 
 const styles = createStyles((theme) => ({
   root: {
@@ -49,6 +50,7 @@ export function Workflow() {
   const [status, setStatus] = useState('');
   const [designation, setDesignation] = useState('');
   const [name, setName] = useState('');
+  const [roles, setRoles] = useState();
 
   const { classes } = styles();
 
@@ -67,6 +69,33 @@ export function Workflow() {
   // useEffect and fetch data from server
 
   const { t } = useTranslation();
+
+  const { request } = useLoading();
+  const getAllRoles = async () => {
+    try {
+      const response = await request(getRolesRequest);
+      if (response.status === 200) {
+        setRoles(response.data);
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching data',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error while fetching data',
+        message: error.response.data
+                && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAllRoles();
+  }, []);
 
   return (
     <>

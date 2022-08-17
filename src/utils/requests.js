@@ -1,10 +1,8 @@
 import axios from 'axios';
 import {
-  LOGIN_URL,
-  REGISTER_URL,
-  LOGOUT_URL,
-  USER_URL,
-  CREATE_FORM_URL, GET_FORM_URL, GET_ALL_FORM_URL, UPDATE_FORM_URL, DELETE_FORM_URL
+  LOGIN_URL, REGISTER_URL, LOGOUT_URL, USER_URL,
+  CREATE_FORM_URL, GET_FORM_URL, GET_ALL_FORM_URL, UPDATE_FORM_URL, DELETE_FORM_URL,
+  GET_ROLES_URL, SET_ROLES_URL
 } from './urls';
 
 // withCredentials
@@ -49,3 +47,12 @@ export const updateFormRequest = ({ name, id, data }) => axios.post(UPDATE_FORM_
 }, withCredentials);
 
 export const deleteFormRequest = ({ id }) => axios.delete(`${DELETE_FORM_URL}?id=${id}`, withCredentials);
+
+// roles
+
+export const getRolesRequest = () => axios.get(`${GET_ROLES_URL}`, withCredentials);
+
+export const setRolesRequest = ({ email, role }) => axios.post(`${SET_ROLES_URL}`, {
+  email,
+  role
+}, withCredentials);

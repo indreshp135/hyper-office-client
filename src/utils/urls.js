@@ -14,3 +14,7 @@ export const GET_FORM_URL = `${BACKEND_URL}/form/get_form`;
 export const GET_ALL_FORM_URL = `${BACKEND_URL}/form//form_list`;
 export const UPDATE_FORM_URL = `${BACKEND_URL}/form/update_form`;
 export const DELETE_FORM_URL = `${BACKEND_URL}/form/delete_form`;
+
+// roles
+export const GET_ROLES_URL = `${BACKEND_URL}/roles/list`;
+export const SET_ROLES_URL = `${BACKEND_URL}/roles/set`;

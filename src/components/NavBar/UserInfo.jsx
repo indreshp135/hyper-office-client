@@ -23,7 +23,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function UserInfo({
-  name, email
+  name, email, role
 }) {
   const { classes } = useStyles();
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ export function UserInfo({
 
         <div style={{ flex: 1 }}>
           <Text size="xs" sx={{ textTransform: 'uppercase' }} weight={700} color="dimmed">
-            {t('administrator')}
+            {t(role.toLowerCase())}
           </Text>
           <Text size="sm" weight={500}>
             {name}
@@ -53,5 +53,6 @@ export function UserInfo({
 
 UserInfo.propTypes = {
   name: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired
+  email: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired
 };
