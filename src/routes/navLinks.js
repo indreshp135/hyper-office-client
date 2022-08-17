@@ -4,7 +4,8 @@ import {
   IconFileReport,
   IconFileUpload,
   IconJumpRope,
-  IconAdjustments
+  IconAdjustments,
+  IconDevicesPc
 } from '@tabler/icons';
 
 export const navLinks = [
@@ -13,5 +14,6 @@ export const navLinks = [
   { link: '/formviewer', label: 'formViewer', icon: IconFileReport },
   { link: '/fileupload', label: 'fileUpload', icon: IconFileUpload },
   { link: '/workflow', label: 'workflow', icon: IconJumpRope },
-  { link: '/setroles', label: 'setRole', icon: IconAdjustments }
+  { link: '/setroles', label: 'setRole', icon: IconAdjustments },
+  { link: '/showpdf', label: 'showPdf', icon: IconDevicesPc }
 ];
