@@ -1,21 +1,57 @@
 import { showNotification } from '@mantine/notifications';
-import { Container } from '@mantine/core';
-import React, { useState, useEffect } from 'react';
+import {
+  Container, Title, Center, Modal, createStyles, useMantineTheme, TextInput, Button
+} from '@mantine/core';
+import React, { useState, useEffect, useRef } from 'react';
 import { FormGenerator } from 'react-forms-builder-135';
 import { useParams } from 'react-router-dom';
 import { getFormRequest } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
+import { createPDF } from '../../utils/pdf';
+import { useAuth } from '../../hooks/useAuth';
+
+const styles = createStyles((theme) => ({
+  root: {
+    position: 'relative'
+  },
+
+  input: {
+    height: 'auto',
+    paddingTop: 18
+  },
+
+  label: {
+    position: 'absolute',
+    pointerEvents: 'none',
+    fontSize: theme.fontSizes.xs,
+    paddingLeft: theme.spacing.sm,
+    paddingTop: theme.spacing.sm / 2,
+    zIndex: 1
+  },
+
+  btn: {
+    borderRadius: '50%',
+    width: 60,
+    height: 60
+  }
+}));
 
 export function FormViewer() {
   const { formId } = useParams();
   const [formData, setFormData] = useState({});
   const { request } = useLoading();
+  const [formName, setFormName] = useState('');
+  const [opened, setOpened] = useState(false);
+  const { classes } = styles();
+  const [fileName, setFileName] = useState('');
+  const { user } = useAuth();
 
   const getForm = async () => {
     try {
       const response = await request(() => getFormRequest(formId));
       if (response.data && response.data.data) {
         setFormData(JSON.parse(response.data.data));
+        setFormName(response.data.name);
       } else {
         showNotification({
           color: 'red',
@@ -32,21 +68,60 @@ export function FormViewer() {
     }
   };
 
+  const ref = useRef();
+
+  const theme = useMantineTheme();
+
   useEffect(() => {
     getForm();
   }, []);
 
+  const handleDrawerClose = () => {
+    createPDF(ref.current, fileName, user.email);
+    setFileName('');
+    setOpened(false);
+  };
+
   return (
-    <Container my={50}>
-      <FormGenerator
-        formData={formData}
-        onSubmit={(data) => {
-          showNotification({
-            title: 'Form Response',
-            message: data
-          });
-        }}
-      />
-    </Container>
+    <>
+      <Container my={50}>
+        <div
+          ref={ref}
+        >
+          <Center mt={10}>
+            <Title>{formName}</Title>
+          </Center>
+          <FormGenerator
+            formData={formData}
+            onSubmit={() => setOpened(true)}
+          />
+        </div>
+      </Container>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
+        overlayOpacity={0.85}
+        overlayBlur={3}
+        size="lg"
+        centered
+      >
+        <div>
+          <TextInput
+            label="File Name"
+            placeholder="What is the name of the file you want to create?"
+            classNames={classes}
+            onChange={(event) => setFileName(event.target.value)}
+            value={fileName}
+          />
+
+          <Center>
+            <Button m={20} onClick={handleDrawerClose}>
+              Download
+            </Button>
+          </Center>
+        </div>
+      </Modal>
+    </>
   );
 }
