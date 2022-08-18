@@ -21,3 +21,6 @@ export const SET_ROLES_URL = `${BACKEND_URL}/roles/set`;
 
 // send pdf
 export const SEND_PDF_URL = `${BACKEND_URL}/sendPDF`;
+
+// workflow
+export const WORKFLOW_URL = `${BACKEND_URL}/workflow`;

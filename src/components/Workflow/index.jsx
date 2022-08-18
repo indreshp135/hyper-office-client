@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container, Paper, Title, Center, Button,
   createStyles, TextInput, Select,
@@ -11,7 +11,9 @@ import { showNotification } from '@mantine/notifications';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DndList } from './DndList';
-import { getRolesRequest } from '../../utils/requests';
+import {
+  getRolesRequest, createWorkflowRequest, getWorkflowRequest, updateWorkflowRequest
+} from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 
 const styles = createStyles((theme) => ({
@@ -43,6 +45,7 @@ const styles = createStyles((theme) => ({
 export function Workflow() {
   // Get id from url
   const { id } = useParams();
+  const { request } = useLoading();
 
   const [opened, setOpened] = useState(false);
   const [state, handlers] = useListState([]);
@@ -66,11 +69,8 @@ export function Workflow() {
 
   const theme = useMantineTheme();
 
-  // useEffect and fetch data from server
-
   const { t } = useTranslation();
 
-  const { request } = useLoading();
   const getAllRoles = async () => {
     try {
       const response = await request(getRolesRequest);
@@ -93,8 +93,87 @@ export function Workflow() {
     }
   };
 
+  const createWorkflow = async (workflow) => {
+    try {
+      const response = await request(() => createWorkflowRequest(workflow));
+      if (response.status === 201) {
+        showNotification({
+          type: 'success',
+          message: 'Workflow Created Successfully'
+        });
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Failed to Create Workflow',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Failed to Create Workflow',
+        message: error.response.data
+              && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
+  const getWorkflow = async () => {
+    try {
+      const response = await request(() => getWorkflowRequest(id));
+      if (response.status === 200) {
+        setName(response.data.name);
+        response.data.state.forEach((stateItem) => handlers.append({
+          status: stateItem.status,
+          designation: stateItem.designation
+        }));
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Failed to Get Workflow',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Failed to Get Workflow',
+        message: error.response.data
+              && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
+  const updateWorkflow = async (workflow) => {
+    try {
+      const response = await request(() => updateWorkflowRequest(id, workflow));
+      if (response.status === 200) {
+        showNotification({
+          type: 'success',
+          message: 'Workflow Updated Successfully'
+        });
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Failed to Update Workflow',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Failed to Update Workflow',
+        message: error.response.data
+              && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
   useEffect(() => {
     getAllRoles();
+    if (id) {
+      getWorkflow();
+    }
   }, []);
 
   return (
@@ -129,10 +208,13 @@ export function Workflow() {
           <Button
             m={20}
             color="indigo"
-            onClick={() => showNotification({
-              title: 'Workflow Created',
-              message: JSON.stringify({ name, state })
-            })}
+            onClick={() => (id ? updateWorkflow({
+              name,
+              state
+            }) : createWorkflow({
+              name,
+              state
+            }))}
           >
             {t('submitWorkflow')}
           </Button>

@@ -1,13 +1,42 @@
+/* eslint-disable no-param-reassign */
 import React, { useState, useEffect } from 'react';
 import { FormBuilder } from 'react-forms-builder-135';
 import { showNotification } from '@mantine/notifications';
 import {
-  Center, Container, TextInput, Title
+  Center, Container, createStyles, Select, TextInput, Title
 } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { createFormRequest, getFormRequest, updateFormRequest } from '../../utils/requests';
+import {
+  createFormRequest, getFormRequest, listWorkflowsRequest, updateFormRequest
+} from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
+
+const styles = createStyles((theme) => ({
+  root: {
+    position: 'relative'
+  },
+
+  input: {
+    height: 'auto',
+    paddingTop: 18
+  },
+
+  label: {
+    position: 'absolute',
+    pointerEvents: 'none',
+    fontSize: theme.fontSizes.xs,
+    paddingLeft: theme.spacing.sm,
+    paddingTop: theme.spacing.sm / 2,
+    zIndex: 1
+  },
+
+  btn: {
+    borderRadius: '50%',
+    width: 60,
+    height: 60
+  }
+}));
 
 export function Formbuilder() {
   const { t } = useTranslation();
@@ -15,10 +44,16 @@ export function Formbuilder() {
   const { formId } = useParams();
   const { request } = useLoading();
 
+  const [workflow, setWorkflow] = useState([]);
+
   const [formData, setFormData] = useState([]);
+  const [workflowData, setWorkflowData] = useState([]);
+
+  const { classes } = styles();
+
   const createForm = async (formItem) => {
     try {
-      const response = await request(() => createFormRequest(name, formItem));
+      const response = await request(() => createFormRequest(name, formItem, workflow));
       if (response.status === 200) {
         showNotification({
           type: 'success',
@@ -43,7 +78,9 @@ export function Formbuilder() {
 
   const updateForm = async (formItem) => {
     try {
-      const response = await request(() => updateFormRequest({ id: formId, data: formItem, name }));
+      const response = await request(() => updateFormRequest({
+        id: formId, data: formItem, name, workflow
+      }));
       if (response.status === 200) {
         showNotification({
           type: 'success',
@@ -72,6 +109,7 @@ export function Formbuilder() {
       if (response.data && response.data.data) {
         setFormData(JSON.parse(response.data.data));
         setName(response.data.name);
+        setWorkflow(response.data.workflow);
       } else {
         showNotification({
           color: 'red',
@@ -89,7 +127,34 @@ export function Formbuilder() {
     }
   };
 
+  const getWorkflows = async () => {
+    try {
+      const response = await request(listWorkflowsRequest);
+      if (response.status === 200) {
+        response.data.forEach((workflowItem) => {
+          workflowItem.value = workflowItem.id; delete workflowItem.id;
+          workflowItem.label = workflowItem.name; delete workflowItem.name;
+        });
+        setWorkflowData(response.data);
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching workflows',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error while fetching workflows',
+        message: error.response.data
+                && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
   useEffect(() => {
+    getWorkflows();
     if (formId) {
       getForm();
     }
@@ -99,6 +164,17 @@ export function Formbuilder() {
     <Container my={50}>
       <Center><Title mb={30}>{t('createEditForms')}</Title></Center>
       <TextInput label="Form Name" required value={name} onChange={(event) => setName(event.currentTarget.value)} />
+      <Select
+        style={{ marginTop: 20, zIndex: 2 }}
+        data={workflowData}
+        placeholder="Select a workflow"
+        label="Workflow"
+        classNames={classes}
+        onChange={(opted) => {
+          setWorkflow(opted);
+        }}
+        value={workflow}
+      />
       <FormBuilder
         formItems={
           formData
