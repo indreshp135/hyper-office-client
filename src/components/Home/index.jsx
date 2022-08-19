@@ -1,12 +1,23 @@
 import React from 'react';
 import {
-  createStyles, Group, Paper, Text, ThemeIcon, SimpleGrid
+  createStyles, Paper, Text, Title, Grid, Accordion, Center, SimpleGrid
 } from '@mantine/core';
-import { IconArrowUpRight, IconArrowDownRight } from '@tabler/icons';
+import '@lottiefiles/lottie-player';
+
+// import LandingImage from '../../images/landing.png';
+import { useAuth } from '../../hooks/useAuth';
 
 const useStyles = createStyles((theme) => ({
   root: {
     padding: theme.spacing.xl * 1.5
+  },
+
+  title: {
+    margin: '10px 0'
+  },
+
+  animation: {
+    width: '80%'
   },
 
   label: {
@@ -16,73 +27,143 @@ const useStyles = createStyles((theme) => ({
 
 const data = [
   {
-    title: 'Revenue',
-    value: '$13,456',
+    count: 5000,
+    name: 'Form Name 1',
     diff: 34
   },
   {
-    title: 'Profit',
-    value: '$4,145',
+    count: 500,
+    name: 'Form Name 2',
     diff: -13
   },
   {
-    title: 'Coupons usage',
-    value: '745',
+    count: 20,
+    name: 'Form Name 3',
     diff: 18
+  }
+];
+
+const faqs = [
+  {
+    id: '1',
+    question: 'This is a question',
+    answer: 'Answer for question 1'
+  },
+  {
+    id: '2',
+    question: 'This is a question',
+    answer: 'Answer for question 2'
+  },
+  {
+    id: '3',
+    question: 'This is a question',
+    answer: 'Answer for question 3'
+  },
+  {
+    id: '4',
+    question: 'This is a question',
+    answer: 'Answer for question 4'
   }
 ];
 
 export function Homepage() {
   const { classes } = useStyles();
-  const stats = data.map((stat) => {
-    const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
 
-    return (
-      <Paper withBorder p="md" radius="md" key={stat.title}>
-        <Group position="apart">
-          <div>
-            <Text
-              color="dimmed"
-              transform="uppercase"
-              weight={700}
-              size="xs"
-              className={classes.label}
-            >
-              {stat.title}
-            </Text>
-            <Text weight={700} size="xl">
-              {stat.value}
-            </Text>
-          </div>
-          <ThemeIcon
-            color="gray"
-            variant="light"
-            sx={(theme) => ({ color: stat.diff > 0 ? theme.colors.teal[6] : theme.colors.red[6] })}
-            size={38}
-            radius="md"
-          >
-            <DiffIcon size={28} stroke={1.5} />
-          </ThemeIcon>
-        </Group>
-        <Text color="dimmed" size="sm" mt="md">
-          <Text component="span" color={stat.diff > 0 ? 'teal' : 'red'} weight={700}>
-            {stat.diff}
-            %
-          </Text>
-          {' '}
-          {stat.diff > 0 ? 'increase' : 'decrease'}
-          {' '}
-          compared to last month
-        </Text>
-      </Paper>
-    );
-  });
+  const { user } = useAuth();
+
+  const stats = data.map((stat) => (
+    <Paper withBorder p="md" radius="md" key={stat.title}>
+      <Text weight={700} size="lg">
+        {stat.name}
+      </Text>
+      <Text
+        color="dimmed"
+        transform="uppercase"
+        weight={400}
+        size="xs"
+        mt="md"
+        className={classes.label}
+      >
+        Form filled by
+        {' '}
+        {stat.count}
+        {' '}
+        people
+      </Text>
+    </Paper>
+  ));
 
   return (
     <div className={classes.root}>
-      <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-        {stats}
-      </SimpleGrid>
+
+      <Title className={classes.title} order={4}>
+        Welcome,
+        {' '}
+        {user.name}
+        !
+      </Title>
+
+      <p>
+        HyperOffice is a decentralised form storage which helps to transition
+        {' '}
+        from paper forms into the digital world!
+      </p>
+
+      <Grid gutter="md">
+        <Grid.Col lg={8}>
+          <Center>
+            <lottie-player
+              autoplay
+              loop
+              mode="normal"
+              src="https://assets8.lottiefiles.com/packages/lf20_pj4rwxci.json"
+              className={classes.animation}
+            />
+          </Center>
+
+          <hr />
+          <Title className={classes.title} order={4}>
+            <Center>
+              Forms you may want to fill
+            </Center>
+          </Title>
+          <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+            {stats}
+          </SimpleGrid>
+          <hr />
+          <Title className={classes.title} order={4}>
+            <Center>
+              Approved Forms
+            </Center>
+          </Title>
+          <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+            {stats}
+          </SimpleGrid>
+
+        </Grid.Col>
+
+        <Grid.Col lg={4}>
+          <Title className={classes.title} order={6}>
+            <Center>
+              Frequently Asked Questions
+            </Center>
+          </Title>
+          <Accordion>
+            {
+              faqs.map((faq) => (
+                <Paper>
+                  <Accordion.Item value={faq.id}>
+                    <Accordion.Control>
+                      {faq.question}
+                    </Accordion.Control>
+                    <Accordion.Panel>{faq.answer}</Accordion.Panel>
+                  </Accordion.Item>
+                </Paper>
+              ))
+            }
+          </Accordion>
+        </Grid.Col>
+      </Grid>
     </div>
   );
 }
