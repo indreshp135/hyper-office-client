@@ -2,6 +2,7 @@ import React from 'react';
 
 import { GeneralPageContainer } from '../containers/GeneralPageContainer';
 import { AuthPageContainer } from '../containers/AuthPageContainer';
+import { LandingPageContainer } from '../containers/LandingPageContainer';
 
 import { Homepage } from '../components/Home';
 import { Formbuilder } from '../components/FormBuilder';
@@ -19,68 +20,85 @@ export const publicRoutes = [
     url: '/auth',
     component: <AuthPageContainer />,
     name: 'AuthPageContainer'
+  },
+  {
+    url: '/',
+    component: <LandingPageContainer />,
+    name: 'LandingPageContainer'
   }
 ];
 
 export const privateRoutes = [
   {
-    url: '/',
+    url: '/home',
     component: <GeneralPageContainer child={<Homepage />} />,
-    name: 'HomePageContainer'
+    name: 'HomePageContainer',
+    label: 'home'
   },
   {
     url: '/formbuilder',
     component: <GeneralPageContainer child={<ListForms />} />,
-    name: 'FormBuilderContainer'
+    name: 'FormBuilderContainer',
+    label: 'formBuilder'
   },
   {
     url: '/formbuilder/:formId',
     component: <GeneralPageContainer child={<Formbuilder />} />,
-    name: 'FormBuilderContainer'
+    name: 'FormBuilderContainer',
+    label: 'formBuilder'
   },
   {
     url: '/formbuilder/create',
     component: <GeneralPageContainer child={<Formbuilder />} />,
-    name: 'FormBuilderContainer'
+    name: 'FormBuilderContainer',
+    label: 'formBuilder'
   },
   {
     url: '/formviewer',
     component: <GeneralPageContainer child={<DisplayForms />} />,
-    name: 'FormViewerContainer'
+    name: 'FormViewerContainer',
+    label: 'formViewer'
   },
   {
     url: '/formviewer/:formId',
     component: <GeneralPageContainer child={<FormViewer />} />,
-    name: 'FormViewerContainer'
+    name: 'FormViewerContainer',
+    label: 'formViewer'
   },
   {
     url: '/fileupload',
     component: <GeneralPageContainer child={<FileUpload />} />,
-    name: 'FileUploadContainer'
+    name: 'FileUploadContainer',
+    label: 'fileUpload'
   },
   {
     url: '/workflow',
     component: <GeneralPageContainer child={<ListWorkFlow />} />,
-    name: 'ListWorkFlowContainer'
+    name: 'ListWorkFlowContainer',
+    label: 'workflow'
   },
   {
     url: '/workflow/:id',
     component: <GeneralPageContainer child={<Workflow />} />,
-    name: 'WorkflowContainer'
+    name: 'WorkflowContainer',
+    label: 'workflow'
   },
   {
     url: '/workflow/create',
     component: <GeneralPageContainer child={<Workflow />} />,
-    name: 'WorkflowContainer'
+    name: 'WorkflowContainer',
+    label: 'workflow'
   },
   {
     url: '/setroles',
     component: <GeneralPageContainer child={<SetRoles />} />,
-    name: 'SetRolesContainer'
+    name: 'SetRolesContainer',
+    label: 'setRole'
   },
   {
     url: '/showpdf',
     component: <GeneralPageContainer child={<ProcessWorkflow />} />,
-    name: 'Process Workflow'
+    name: 'Process Workflow',
+    label: 'showPdf'
   }
 ];
