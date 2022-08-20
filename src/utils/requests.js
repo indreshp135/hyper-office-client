@@ -5,7 +5,7 @@ import {
   LOGOUT_URL,
   USER_URL,
   CREATE_FORM_URL, GET_FORM_URL, GET_ALL_FORM_URL, UPDATE_FORM_URL,
-  DELETE_FORM_URL, WORKFLOW_URL, GET_ROLES_URL, SET_ROLES_URL
+  DELETE_FORM_URL, WORKFLOW_URL, GET_ROLES_URL, SET_ROLES_URL, SAVE_FORM_RESPONSE_URL
 } from './urls';
 
 // withCredentials
@@ -83,3 +83,5 @@ export const updateWorkflowRequest = (id, workflow) => axios.put(
 );
 
 export const deleteWorkflowRequest = (id) => axios.delete(`${WORKFLOW_URL}/${id}`, withCredentials);
+
+export const saveFormResponseRequest = (formId, response) => axios.post(`${SAVE_FORM_RESPONSE_URL}`, { formId, response }, withCredentials);

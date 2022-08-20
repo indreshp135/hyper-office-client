@@ -160,7 +160,7 @@ export function NavBar({ opened, setOpened }) {
       />
 
       <Navbar.Section className={classes.footer}>
-        <UserInfo name={user.name} email={user.email} role={user.role} />
+        {user && <UserInfo name={user.name} email={user.email} role={user.role} />}
         <UnstyledButton className={classes.link} onClick={logout}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>{t('logout')}</span>
