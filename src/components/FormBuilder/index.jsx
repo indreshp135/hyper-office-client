@@ -71,7 +71,7 @@ export function Formbuilder() {
         color: 'red',
         title: 'Failed to Create Form',
         message: error.response.data
-                && error.response.data.message ? error.response.data.message : error.message
+          && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };
@@ -98,7 +98,7 @@ export function Formbuilder() {
         color: 'red',
         title: 'Failed to Update Form',
         message: error.response.data
-                && error.response.data.message ? error.response.data.message : error.message
+          && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };
@@ -106,10 +106,10 @@ export function Formbuilder() {
   const getForm = async () => {
     try {
       const response = await request(() => getFormRequest(formId));
-      if (response.data && response.data.data) {
-        setFormData(JSON.parse(response.data.data));
-        setName(response.data.name);
-        setWorkflow(response.data.workflow);
+      if (response.data && response.data.form) {
+        setFormData(JSON.parse(response.data.form.data));
+        setName(response.data.form.name);
+        setWorkflow(response.data.form.workflow);
       } else {
         showNotification({
           color: 'red',
@@ -122,7 +122,7 @@ export function Formbuilder() {
         color: 'red',
         title: 'No such form',
         message: error.response.data
-                && error.response.data.message ? error.response.data.message : error.message
+          && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };
@@ -148,7 +148,7 @@ export function Formbuilder() {
         color: 'red',
         title: 'Error while fetching workflows',
         message: error.response.data
-                && error.response.data.message ? error.response.data.message : error.message
+          && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };

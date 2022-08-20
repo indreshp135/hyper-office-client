@@ -5,7 +5,7 @@ import {
 import React, { useState, useEffect, useRef } from 'react';
 import { FormGenerator } from 'react-forms-builder-135';
 import { useParams } from 'react-router-dom';
-import { getFormRequest, saveFormResponseRequest } from '../../utils/requests';
+import { getFormRequest } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 import { createPDF } from '../../utils/pdf';
 import { useAuth } from '../../hooks/useAuth';
@@ -81,8 +81,8 @@ export function FormViewer() {
   }, []);
 
   const handleDrawerClose = async () => {
-    await request(() => saveFormResponseRequest(formId, formResponseData));
-    createPDF(ref.current, fileName, user.email);
+    // await request(() => saveFormResponseRequest(formId, formResponseData));
+    createPDF(ref.current, fileName, user.email, formId, formResponseData);
     setFileName('');
     setOpened(false);
   };
