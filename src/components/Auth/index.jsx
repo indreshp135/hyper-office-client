@@ -7,10 +7,10 @@ import {
   Paper,
   Group,
   Button,
-  Checkbox,
   Anchor,
   Stack,
-  Container
+  Container,
+  Center
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ import { registerRequest } from '../../utils/requests';
 import { useAuth } from '../../hooks/useAuth';
 import { HeaderNav } from '../Header';
 import { useLoading } from '../../hooks/useLoading';
+import { navLinks } from '../../routes/navLinks';
 
 export function Auth() {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export function Auth() {
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate(navLinks.filter((link) => link.label === user.tabs[0])[0].link);
     }
   }, [user, navigate]);
 
@@ -99,6 +100,16 @@ export function Auth() {
             {t(`${type}`)}
           </Title>
 
+          <Center>
+            <lottie-player
+              autoplay
+              loop
+              mode="normal"
+              src="https://assets1.lottiefiles.com/packages/lf20_nc1bp7st.json"
+              style={{ width: 200 }}
+            />
+          </Center>
+
           <form onSubmit={form.onSubmit(() => submitForm())}>
             <Stack>
               {type === 'register' && (
@@ -125,13 +136,6 @@ export function Auth() {
                 error={form.errors.password && 'Password should include at least 6 characters'}
               />
 
-              {type === 'register' && (
-                <Checkbox
-                  label="I accept terms and conditions"
-                  checked={form.values.terms}
-                  onChange={(event) => form.setFieldValue('terms', event.currentTarget.checked)}
-                />
-              )}
             </Stack>
 
             <Group position="apart" mt="xl">

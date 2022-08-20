@@ -87,22 +87,20 @@ const useStyles = createStyles((theme, _params, getRef) => {
 export function NavBar({ opened, setOpened }) {
   const location = useLocation();
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState('/');
+  const [active, setActive] = useState('/home');
   const { i18n, t } = useTranslation();
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     setActive(location.pathname);
   }, [location]);
 
-  const { logout } = useAuth();
-
-  const links = navLinks.map((item) => (
+  const links = navLinks.filter((item) => user.tabs.includes(item.label)).map((item) => (
     <Link
-      className={cx(classes.link, { [classes.linkActive]: (active.includes(item.link) && item.link !== '/') || item.link === active })}
+      className={cx(classes.link, { [classes.linkActive]: (active.includes(item.link) && item.link !== '/home') || item.link === active })}
       to={item.link}
       key={item.label}
       onClick={() => {

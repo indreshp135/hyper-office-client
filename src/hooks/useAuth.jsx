@@ -7,6 +7,7 @@ import { showNotification } from '@mantine/notifications';
 import { loginRequest, logoutRequest, userRequest } from '../utils/requests';
 import { useLocalStorage } from './useLocalStorage';
 import { useLoading } from './useLoading';
+import { navLinks } from '../routes/navLinks';
 
 const AuthContext = createContext();
 
@@ -24,7 +25,7 @@ export function AuthProvider({ children }) {
         showNotification({
           title: 'Login successful'
         });
-        navigate('/', { replace: true });
+        navigate(navLinks.filter((link) => link.label === res.data.tabs[0])[0].link);
       } else {
         showNotification({
           color: 'red',

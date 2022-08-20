@@ -72,7 +72,7 @@ export function Homepage() {
   const { user } = useAuth();
 
   const stats = data.map((stat) => (
-    <Paper withBorder p="md" radius="md" key={stat.title}>
+    <Paper withBorder p="md" radius="md" key={stat.name}>
       <Text weight={700} size="lg">
         {stat.name}
       </Text>
@@ -124,7 +124,7 @@ export function Homepage() {
           <hr />
           <Title className={classes.title} order={4}>
             <Center>
-              Forms you may want to fill
+              Forms under review
             </Center>
           </Title>
           <SimpleGrid cols={3} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
@@ -151,7 +151,7 @@ export function Homepage() {
           <Accordion>
             {
               faqs.map((faq) => (
-                <Paper>
+                <Paper key={faq.id}>
                   <Accordion.Item value={faq.id}>
                     <Accordion.Control>
                       {faq.question}
