@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   createStyles, Header, Container, Group, UnstyledButton, Text, Center,
-  useMantineColorScheme, Burger, Paper, MediaQuery, useMantineTheme
+  useMantineColorScheme, Burger, Paper, MediaQuery, useMantineTheme, Image, Title
 } from '@mantine/core';
-import { MantineLogo } from '@mantine/ds';
 import { IconMoon, IconSun } from '@tabler/icons';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import logo from './logo.png';
 
 const HEADER_HEIGHT = 80;
 
@@ -100,6 +100,10 @@ const useStyles = createStyles((theme) => ({
 
   value: {
     lineHeight: 1
+  },
+
+  flexer: {
+    display: 'flex'
   }
 }));
 
@@ -116,7 +120,6 @@ export function HeaderNav({ opened: open, setOpened }) {
       aria-label="Toggle theme"
       className={classes.control}
       onClick={() => toggleColorScheme()}
-      title="Ctrl + J"
     >
       <Text size="sm" className={classes.value}>
         {t(`${colorScheme}Theme`)}
@@ -131,7 +134,10 @@ export function HeaderNav({ opened: open, setOpened }) {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root} p="md">
       <Container className={classes.header}>
-        <MantineLogo size={28} />
+        <div className={classes.flexer}>
+          <Image src={logo} style={{ width: 28 }} />
+          <Title order={4} ml={20}>Hyper Office</Title>
+        </div>
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
