@@ -15,5 +15,9 @@ export const navLinks = [
   { link: '/fileupload', label: 'fileUpload', icon: IconFileUpload },
   { link: '/workflow', label: 'workflow', icon: IconJumpRope },
   { link: '/setroles', label: 'setRole', icon: IconAdjustments },
-  { link: '/showpdf', label: 'showPdf', icon: IconDevicesPc }
+  { link: '/showpdf', label: 'showPdf', icon: IconDevicesPc },
+  { link: '/showapproved', label: 'showApproved', icon: IconDevicesPc },
+  { link: '/showrejected', label: 'showRejected', icon: IconDevicesPc },
+  { link: '/showpending', label: 'showPending', icon: IconDevicesPc },
+  { link: '/documentsForApproval', label: 'documentsForApproval', icon: IconDevicesPc }
 ];

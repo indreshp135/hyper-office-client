@@ -5,7 +5,11 @@ import {
   LOGOUT_URL,
   USER_URL,
   CREATE_FORM_URL, GET_FORM_URL, GET_ALL_FORM_URL, UPDATE_FORM_URL,
-  DELETE_FORM_URL, WORKFLOW_URL, GET_ROLES_URL, SET_ROLES_URL, SAVE_FORM_RESPONSE_URL
+  DELETE_FORM_URL, WORKFLOW_URL, GET_ROLES_URL, SET_ROLES_URL,
+  SAVE_FORM_RESPONSE_URL,
+  GET_APPROVED_DOCS, GET_REJECTED_DOCS, GET_PROCESSING_DOCS, GET_FILE,
+  GET_APPROVE_DOC_URL,
+  APPROVE_OR_REJECT_DOC_URL
 } from './urls';
 
 // withCredentials
@@ -58,6 +62,19 @@ export const updateFormRequest = ({
 
 export const deleteFormRequest = ({ id }) => axios.delete(`${DELETE_FORM_URL}?id=${id}`, withCredentials);
 
+// form responses requests
+
+export const getApprovedDocsRequest = () => axios.get(GET_APPROVED_DOCS, withCredentials);
+
+export const getRejectedDocsRequest = () => axios.get(GET_REJECTED_DOCS, withCredentials);
+
+export const getProcessingDocsRequest = () => axios.get(GET_PROCESSING_DOCS, withCredentials);
+
+// form responses get approve
+export const getApproveDocRequest = () => axios.get(`${GET_APPROVE_DOC_URL}`, withCredentials);
+
+export const approveDocRequest = (fileId, approve) => axios.patch(`${APPROVE_OR_REJECT_DOC_URL}/${fileId}/${approve}`, {}, withCredentials);
+
 // roles
 
 export const getRolesRequest = () => axios.get(`${GET_ROLES_URL}`, withCredentials);
@@ -88,3 +105,6 @@ export const updateWorkflowRequest = (id, workflow) => axios.put(
 export const deleteWorkflowRequest = (id) => axios.delete(`${WORKFLOW_URL}/${id}`, withCredentials);
 
 export const saveFormResponseRequest = (formId, response) => axios.post(`${SAVE_FORM_RESPONSE_URL}`, { formId, response }, withCredentials);
+
+// get file
+export const fileGetRequest = (fileId) => `${GET_FILE}/${fileId}/view`;

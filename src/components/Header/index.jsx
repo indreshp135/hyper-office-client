@@ -6,6 +6,7 @@ import {
 import { IconMoon, IconSun } from '@tabler/icons';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import logo from './logo.png';
 
 const HEADER_HEIGHT = 80;
@@ -112,6 +113,7 @@ export function HeaderNav({ opened: open, setOpened }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const Icon = colorScheme === 'dark' ? IconMoon : IconSun;
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const theme = useMantineTheme();
 
@@ -134,10 +136,10 @@ export function HeaderNav({ opened: open, setOpened }) {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root} p="md">
       <Container className={classes.header}>
-        <div className={classes.flexer}>
+        <UnstyledButton className={classes.flexer} onClick={() => navigate('/')}>
           <Image src={logo} style={{ width: 28 }} />
           <Title order={4} ml={20}>Hyper Office</Title>
-        </div>
+        </UnstyledButton>
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>

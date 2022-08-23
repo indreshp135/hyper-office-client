@@ -5,7 +5,7 @@ import {
 import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getAllFormsRequest } from '../../utils/requests';
+import PropTypes from 'prop-types';
 import { useLoading } from '../../hooks/useLoading';
 
 const useStyles = createStyles((theme) => ({
@@ -36,7 +36,9 @@ const useStyles = createStyles((theme) => ({
 
 // const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple'];
 
-export function DisplayForms() {
+export function DisplayForms({
+  formsRequest, name, forms, approval
+}) {
   const { t } = useTranslation();
   const { classes } = useStyles();
   const navigate = useNavigate();
@@ -44,7 +46,7 @@ export function DisplayForms() {
   const { request, isLoading } = useLoading();
   const getAllForms = async () => {
     try {
-      const response = await request(getAllFormsRequest);
+      const response = await request(formsRequest);
       if (response.status === 200) {
         setData(response.data);
       } else {
@@ -65,7 +67,7 @@ export function DisplayForms() {
   };
   useEffect(() => {
     getAllForms();
-  }, []);
+  }, [formsRequest]);
 
   const items = data.length
 
@@ -80,7 +82,7 @@ export function DisplayForms() {
             <Button
               variant="light"
               className={classes.item}
-              onClick={() => navigate(`./${item.id}`)}
+              onClick={() => navigate(approval ? `/documentsForApproval/${item.id}` : !forms ? `/viewdocs/${item.id}` : `./${item.id}`)}
             >
               <Text
                 size="xs"
@@ -95,7 +97,7 @@ export function DisplayForms() {
       !isLoading && (
         <Container my={50}>
           <Group position="center">
-            <Title order={4}>{t('noFormAvailable')}</Title>
+            <Title order={4}>{!forms ? t('noDocsAvailable') : t('noFormsAvailable')}</Title>
           </Group>
         </Container>
       )
@@ -104,9 +106,21 @@ export function DisplayForms() {
   return (
     <Container my={50}>
       <Group position="center">
-        <Title className={classes.title}>{t('fillForms')}</Title>
+        <Title className={classes.title}>{name}</Title>
       </Group>
       {items}
     </Container>
   );
 }
+
+DisplayForms.defaultProps = {
+  forms: false,
+  approval: false
+};
+
+DisplayForms.propTypes = {
+  formsRequest: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  forms: PropTypes.bool,
+  approval: PropTypes.bool
+};

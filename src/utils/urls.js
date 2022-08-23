@@ -15,6 +15,18 @@ export const GET_ALL_FORM_URL = `${BACKEND_URL}/form//form_list`;
 export const UPDATE_FORM_URL = `${BACKEND_URL}/form/update_form`;
 export const DELETE_FORM_URL = `${BACKEND_URL}/form/delete_form`;
 
+// form responses docs
+export const GET_APPROVED_DOCS = `${BACKEND_URL}/form/response/approved`;
+export const GET_REJECTED_DOCS = `${BACKEND_URL}/form/response/rejected`;
+export const GET_PROCESSING_DOCS = `${BACKEND_URL}/form/response/processing`;
+
+// approvals
+export const GET_APPROVE_DOC_URL = `${BACKEND_URL}/form/response/toapprove`;
+export const APPROVE_OR_REJECT_DOC_URL = `${BACKEND_URL}/form/response`;
+
+//
+export const GET_FILE = `${BACKEND_URL}/form/response/file`;
+
 // roles
 export const GET_ROLES_URL = `${BACKEND_URL}/roles/list`;
 export const SET_ROLES_URL = `${BACKEND_URL}/roles/set`;

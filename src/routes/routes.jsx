@@ -15,6 +15,14 @@ import { DisplayForms } from '../components/DisplayForms';
 import { SetRoles } from '../components/SetRole';
 import { ProcessWorkflow } from '../components/ProcessWorkflow';
 
+import {
+  getApprovedDocsRequest,
+  getRejectedDocsRequest,
+  getProcessingDocsRequest,
+  getAllFormsRequest,
+  getApproveDocRequest
+} from '../utils/requests';
+
 export const publicRoutes = [
   {
     url: '/auth',
@@ -55,7 +63,14 @@ export const privateRoutes = [
   },
   {
     url: '/formviewer',
-    component: <GeneralPageContainer child={<DisplayForms />} />,
+    component: <GeneralPageContainer child={(
+      <DisplayForms
+        formsRequest={getAllFormsRequest}
+        name="Show Forms"
+        forms
+      />
+    )}
+    />,
     name: 'FormViewerContainer',
     label: 'formViewer'
   },
@@ -96,9 +111,66 @@ export const privateRoutes = [
     label: 'setRole'
   },
   {
-    url: '/showpdf',
+    url: '/showapproved',
+    component: <GeneralPageContainer
+      child={(
+        <DisplayForms
+          formsRequest={getApprovedDocsRequest}
+          name="Show Approved"
+        />
+      )}
+    />,
+    name: 'Show Approved',
+    label: 'showApproved'
+  },
+  {
+    url: '/showrejected',
+    component: <GeneralPageContainer
+      child={(
+        <DisplayForms
+          formsRequest={getRejectedDocsRequest}
+          name="Show Rejected"
+        />
+      )}
+    />,
+    name: 'Show Rejected',
+    label: 'showRejected'
+  },
+  {
+    url: '/showpending',
+    component: <GeneralPageContainer child={(
+      <DisplayForms
+        formsRequest={getProcessingDocsRequest}
+        name="Show Pending"
+      />
+    )}
+    />,
+    name: 'Show Pending',
+    label: 'showPending'
+  },
+  {
+    url: '/viewdocs/:docid',
+    component: <GeneralPageContainer child={<ProcessWorkflow viewOnly />} />,
+    name: 'Process Workflow',
+    label: 'viewdocs'
+  },
+  {
+    url: '/documentsForApproval',
+    component: <GeneralPageContainer child={(
+      <DisplayForms
+        formsRequest={getApproveDocRequest}
+        name="Check Documents"
+        approval
+      />
+    )}
+    />,
+    name: 'Process Workflow',
+    label: 'documentsForApproval'
+  },
+  {
+    url: '/documentsForApproval/:docid',
     component: <GeneralPageContainer child={<ProcessWorkflow />} />,
     name: 'Process Workflow',
-    label: 'showPdf'
+    label: 'documentsForApproval'
   }
 ];

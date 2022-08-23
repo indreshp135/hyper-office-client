@@ -114,7 +114,6 @@ export function Auth() {
       }
     } else {
       try {
-        console.log(form.values);
         const response = await request(() => registerRequest(
           form.values
         ));
