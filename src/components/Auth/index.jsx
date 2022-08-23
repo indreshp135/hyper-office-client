@@ -1,13 +1,15 @@
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  createStyles,
   TextInput,
   Title,
   Paper,
   Group,
   Button,
   Anchor,
+  Select,
   Stack,
   Container,
   Center
@@ -16,23 +18,73 @@ import { showNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PasswordStrength } from './Password';
-import { registerRequest } from '../../utils/requests';
+import { getRolesRequest, registerRequest } from '../../utils/requests';
 import { useAuth } from '../../hooks/useAuth';
 import { HeaderNav } from '../Header';
 import { useLoading } from '../../hooks/useLoading';
 import { navLinks } from '../../routes/navLinks';
 
+const useStyles = createStyles((theme) => ({
+  root: {
+    position: 'relative'
+  },
+
+  input: {
+    height: 'auto',
+    paddingTop: 18
+  },
+
+  label: {
+    position: 'absolute',
+    pointerEvents: 'none',
+    fontSize: theme.fontSizes.xs,
+    paddingLeft: theme.spacing.sm,
+    paddingTop: theme.spacing.sm / 2,
+    zIndex: 1
+  }
+}));
+
 export function Auth() {
+  const { classes } = useStyles();
   const { t } = useTranslation();
   const [type, toggle] = useToggle(['login', 'register']);
   const navigate = useNavigate();
   const { login, user } = useAuth();
   const { request } = useLoading();
+  const [roles, setRoles] = useState([]);
+
+  const getAllRoles = async () => {
+    try {
+      const response = await request(getRolesRequest);
+      if (response.status === 200) {
+        setRoles(response.data);
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching data',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error while fetching data',
+        message: error.response.data
+                && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAllRoles();
+  }, []);
+
   const form = useForm({
     initialValues: {
       email: '',
       name: '',
       password: '',
+      role: 'User',
       terms: true
     },
 
@@ -62,6 +114,7 @@ export function Auth() {
       }
     } else {
       try {
+        console.log(form.values);
         const response = await request(() => registerRequest(
           form.values
         ));
@@ -135,6 +188,20 @@ export function Auth() {
                 onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
                 error={form.errors.password && 'Password should include at least 6 characters'}
               />
+
+              {type === 'register' && (
+                <Select
+                  style={{ marginTop: 20, zIndex: 2 }}
+                  data={roles}
+                  placeholder="Set role"
+                  label="Role"
+                  classNames={classes}
+                  value={form.values.role}
+                  onChange={(opted) => {
+                    form.setFieldValue('role', opted);
+                  }}
+                />
+              )}
 
             </Stack>
 

@@ -19,10 +19,13 @@ export const loginRequest = ({ email, password }) => axios.post(LOGIN_URL, {
   password
 }, withCredentials);
 
-export const registerRequest = ({ email, name, password }) => axios.post(REGISTER_URL, {
+export const registerRequest = ({
+  email, name, password, role
+}) => axios.post(REGISTER_URL, {
   email,
   password,
-  name
+  name,
+  role
 }, withCredentials);
 
 export const logoutRequest = () => axios.get(LOGOUT_URL, withCredentials);
