@@ -1,7 +1,9 @@
 import React from 'react';
-import Viewer, { Worker } from '@phuocng/react-pdf-viewer';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
-import '@phuocng/react-pdf-viewer/cjs/react-pdf-viewer.css';
 import {
   Button, Container, Grid
 } from '@mantine/core';
@@ -14,6 +16,7 @@ import { approveDocRequest, fileGetRequest } from '../../utils/requests';
 export function ProcessWorkflow({ viewOnly }) {
   const { docid } = useParams();
   const navigate = useNavigate();
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const sendProcess = async (status) => {
     try {
@@ -70,7 +73,11 @@ export function ProcessWorkflow({ viewOnly }) {
       )}
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js">
         <div>
-          <Viewer fileUrl={fileGetRequest(docid)} />
+          <Viewer
+            fileUrl={fileGetRequest(docid)}
+            withCredentials
+            plugins={[defaultLayoutPluginInstance]}
+          />
         </div>
       </Worker>
 
