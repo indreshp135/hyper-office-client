@@ -90,7 +90,7 @@ function WorkFlows() {
         !isLoading && (
           <Container my={50}>
             <Group position="center">
-              <Title order={4}>{t('noFormAvailable')}</Title>
+              <Title order={4}>{t('No Form Available')}</Title>
             </Group>
           </Container>
         )

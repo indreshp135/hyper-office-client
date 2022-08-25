@@ -89,7 +89,7 @@ function WorkFlows() {
       : (
         <Container my={50}>
           <Group position="center">
-            <Title order={4}>{t('noWorkflowAvailable')}</Title>
+            <Title order={4}>{t('No Workflow Available')}</Title>
           </Group>
         </Container>
       )

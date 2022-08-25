@@ -85,7 +85,7 @@ export function DisplayForms({
               onClick={() => navigate(approval ? `/documentsForApproval/${item.id}` : !forms ? `/viewdocs/${item.id}` : `./${item.id}`)}
             >
               <Text
-                size="xs"
+                size="lg"
               >
                 {item.name}
               </Text>

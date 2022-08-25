@@ -105,8 +105,6 @@ export function Homepage() {
     }
   };
 
-  console.log(approved, pending);
-
   useEffect(() => {
     getStats();
   }, []);
@@ -224,8 +222,7 @@ export function Homepage() {
                   mt="md"
                   className={classes.label}
                 >
-                  Approval pending from
-                  approvers
+                  Approved.
                 </Text>
               </Paper>
             ))}
