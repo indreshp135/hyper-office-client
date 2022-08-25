@@ -11,7 +11,7 @@ export const USER_URL = `${BACKEND_URL}/auth/user`;
 // forms
 export const CREATE_FORM_URL = `${BACKEND_URL}/form/create_form`;
 export const GET_FORM_URL = `${BACKEND_URL}/form/get_form`;
-export const GET_ALL_FORM_URL = `${BACKEND_URL}/form/form_list`;
+export const GET_ALL_FORM_URL = `${BACKEND_URL}/form/all`;
 export const UPDATE_FORM_URL = `${BACKEND_URL}/form/update_form`;
 export const DELETE_FORM_URL = `${BACKEND_URL}/form/delete_form`;
 export const GET_APPROVAL_STATUS_URL = `${BACKEND_URL}/form/approval_status`;

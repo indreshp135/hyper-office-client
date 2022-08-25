@@ -27,7 +27,7 @@ export function ProcessWorkflow({ viewOnly }) {
           title: 'Success',
           message: `Document has been ${status}`
         });
-        navigate('..');
+        navigate('/documentsForApproval');
       } else {
         showNotification({
           color: 'red',
