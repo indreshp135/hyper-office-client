@@ -56,9 +56,12 @@ export function Formbuilder() {
 
   const createForm = async (formItem) => {
     try {
-      const response = await request(() => {
-        createFormRequest(name, formItem, workflow, dependsOnForms);
-      });
+      const response = await request(() => createFormRequest(
+        name,
+        formItem,
+        workflow,
+        dependsOnForms
+      ));
       if (response.status === 200) {
         showNotification({
           type: 'success',
