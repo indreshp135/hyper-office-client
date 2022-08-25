@@ -2,47 +2,52 @@ import React from 'react';
 import {
   ThemeIcon,
   Text,
-  Title,
   Container,
   SimpleGrid,
   useMantineTheme,
   createStyles
 } from '@mantine/core';
 import {
-  IconGauge, IconCookie, IconUser, IconMessage2, IconLock
+  IconWorld, IconFriends, IconUser, IconPlant, IconLock, IconCertificate
 } from '@tabler/icons';
 import PropTypes from 'prop-types';
 
 export const FEATURES = [
   {
-    icon: IconGauge,
-    title: 'Extreme performance',
+    icon: IconWorld,
+    title: 'Completely digital',
     description:
-        'This dust is actually a powerful poison that will even make a pro wrestler sick, Regice cloaks itself with frigid air of -328 degrees Fahrenheit'
+        'Digital infrastructure for a robust and smart Document Management System (DMS) that will make ICCR paperless.'
   },
   {
     icon: IconUser,
-    title: 'Privacy focused',
+    title: 'Accountable & Fast',
     description:
-        'People say it can run at the same speed as lightning striking, Its icy body is so cold, it will not melt even if it is immersed in magma'
+        'Reduce intermediaries in the approval process thereby reducing complexity in workflow & improving speed.'
   },
   {
-    icon: IconCookie,
-    title: 'No third parties',
+    icon: IconFriends,
+    title: 'Compatibility & Inclusivity',
     description:
-        'They’re popular, but they’re rare. Trainers who show them off recklessly may be targeted by thieves'
+        'Multi-language and multi-device support to account for the diversity in India.'
   },
   {
     icon: IconLock,
     title: 'Secure by default',
     description:
-        'Although it still can’t fly, its jumping power is outstanding, in Alola the mushrooms on Paras don’t grow up quite right'
+        'Hyperledger enables clients to record, share and synchronize transactions of files in their respective electronic ledgers.'
   },
   {
-    icon: IconMessage2,
-    title: '24/7 Support',
+    icon: IconCertificate,
+    title: 'Digital Signatures',
     description:
-        'Rapidash usually can be seen casually cantering in the fields and plains, Skitty is known to chase around after its own tail'
+      'Digital signature of the document enables the user to verify the signature in the document'
+  },
+  {
+    icon: IconPlant,
+    title: 'Reduce Carbon Footprint',
+    description:
+        'Drastically minimize paper consumption in the long run by transitioning from paper to digital.'
   }
 ];
 
@@ -99,17 +104,17 @@ export function FeaturesGrid() {
 
   return (
     <Container className={classes.wrapper}>
-      <Title className={classes.title}>
+      {/* <Title className={classes.title}>
 
         Integrate effortlessly with any technology stack
-      </Title>
+      </Title> */}
 
-      <Container size={560} p={0}>
+      {/* <Container size={560} p={0}>
         <Text size="sm" className={classes.description}>
           Every once in a while, you’ll see a Golbat that’s missing some fangs.
           This happens when hunger drives it to try biting a Steel-type Pokémon.
         </Text>
-      </Container>
+      </Container> */}
 
       <SimpleGrid
         mt={60}
