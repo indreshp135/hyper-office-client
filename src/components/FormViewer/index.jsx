@@ -56,16 +56,18 @@ export function FormViewer() {
       if (response.data && response.data.form) {
         setFormData(JSON.parse(response.data.form.data));
         setFormName(response.data.form.name);
-        setDependsOnForms(response.data.form.depends_on);
-        const formStatuses = [];
-        // eslint-disable-next-line no-restricted-syntax
-        for (const form of response.data.form.depends_on) {
-          // eslint-disable-next-line no-await-in-loop
-          const formStatus = await request(() => getFormApprovalStatusRequest(form));
-          // eslint-disable-next-line max-len
-          formStatuses.push({ formId: form, formName: formStatus.data.name, approvalStatus: formStatus.data.approval_status });
+        if (response.data.form.depends_on) {
+          setDependsOnForms(response.data.form.depends_on);
+          const formStatuses = [];
+          // eslint-disable-next-line no-restricted-syntax
+          for (const form of response.data.form.depends_on) {
+            // eslint-disable-next-line no-await-in-loop
+            const formStatus = await request(() => getFormApprovalStatusRequest(form));
+            // eslint-disable-next-line max-len
+            formStatuses.push({ formId: form, formName: formStatus.data.name, approvalStatus: formStatus.data.approval_status });
+          }
+          setDependentFormStatuses(formStatuses);
         }
-        setDependentFormStatuses(formStatuses);
 
         if (response.data.saved_response) {
           setFormResponseData(JSON.parse(response.data.saved_response.data));
@@ -93,10 +95,6 @@ export function FormViewer() {
   useEffect(() => {
     getForm();
   }, []);
-
-  useEffect(() => {
-    console.log(dependentFormStatuses);
-  }, [dependentFormStatuses]);
 
   const handleDrawerClose = async () => {
     // await request(() => saveFormResponseRequest(formId, formResponseData));
