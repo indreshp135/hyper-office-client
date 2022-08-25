@@ -20,7 +20,8 @@ import {
   GET_FILE,
   GET_APPROVE_DOC_URL,
   APPROVE_OR_REJECT_DOC_URL,
-  GET_APPROVAL_STATUS_URL
+  GET_APPROVAL_STATUS_URL,
+  GET_LANDING_STATS
 } from './urls';
 
 // withCredentials
@@ -105,6 +106,8 @@ export const getRejectedDocsRequest = () => axios.get(GET_REJECTED_DOCS, withCre
 export const getProcessingDocsRequest = () => axios.get(GET_PROCESSING_DOCS, withCredentials);
 
 export const getDocsRequestStatus = (formId) => axios.get(`${GET_DOCS_STATUS}/${formId}`, withCredentials);
+
+export const getLandingPageStats = () => axios.get(GET_LANDING_STATS, withCredentials);
 
 // form responses get approve
 export const getApproveDocRequest = () => axios.get(`${GET_APPROVE_DOC_URL}`, withCredentials);

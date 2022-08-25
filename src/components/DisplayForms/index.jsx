@@ -97,7 +97,7 @@ export function DisplayForms({
       !isLoading && (
         <Container my={50}>
           <Group position="center">
-            <Title order={4}>{!forms ? t('noDocsAvailable') : t('noFormsAvailable')}</Title>
+            <Title order={4}>{!forms ? t('No Docs Available') : t('No Forms Available')}</Title>
           </Group>
         </Container>
       )
