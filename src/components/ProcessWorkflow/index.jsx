@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 import {
-  Button, Container, Grid
+  Button, Container, Grid, createStyles, Timeline, Title, Center, Text
 } from '@mantine/core';
-import { IconCheck, IconTrash } from '@tabler/icons';
+import { IconCheck, IconTrash, IconPlus } from '@tabler/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { showNotification } from '@mantine/notifications';
-import { approveDocRequest, fileGetRequest } from '../../utils/requests';
+import { useLoading } from '../../hooks/useLoading';
+import { approveDocRequest, fileGetRequest, getDocsRequestStatus } from '../../utils/requests';
+
+const useStyles = createStyles((theme) => ({
+  root: {
+    padding: theme.spacing.xl * 1.5
+  }
+}));
 
 export function ProcessWorkflow({ viewOnly }) {
+  const { classes } = useStyles();
   const { docid } = useParams();
+  const { request } = useLoading();
+  const [data, setData] = useState();
   const navigate = useNavigate();
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
@@ -45,43 +55,96 @@ export function ProcessWorkflow({ viewOnly }) {
     }
   };
 
-  return (
-    <Container my={50}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'right',
-        margin: 20
-      }}
-      >
-        <Button color="grape">
-          Show History
-        </Button>
-      </div>
-      {!viewOnly && (
-        <Grid grow my={10}>
-          <Grid.Col span={6}>
-            <Button style={{ width: '100%' }} leftIcon={<IconCheck />} onClick={() => sendProcess('approve')}>
-              Approve
-            </Button>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Button color="red" style={{ width: '100%' }} leftIcon={<IconTrash />} onClick={() => sendProcess('reject')}>
-              Reject
-            </Button>
-          </Grid.Col>
-        </Grid>
-      )}
-      <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js">
-        <div>
-          <Viewer
-            fileUrl={fileGetRequest(docid)}
-            withCredentials
-            plugins={[defaultLayoutPluginInstance]}
-          />
-        </div>
-      </Worker>
+  const getDocStatus = async () => {
+    try {
+      const response = await request(() => getDocsRequestStatus(docid));
 
-    </Container>
+      if (response.data) {
+        setData(response.data);
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching data'
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error',
+        message: error.response.data
+                && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
+  useEffect(() => {
+    getDocStatus();
+  }, []);
+
+  return (
+    <div className={classes.root}>
+      <Grid gutter="md">
+        <Grid.Col lg={8} orderlg={2}>
+          <Container my={50}>
+            {!viewOnly && (
+              <Grid grow my={10}>
+                <Grid.Col span={6}>
+                  <Button style={{ width: '100%' }} leftIcon={<IconCheck />} onClick={() => sendProcess('approve')}>
+                    Approve
+                  </Button>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Button color="red" style={{ width: '100%' }} leftIcon={<IconTrash />} onClick={() => sendProcess('reject')}>
+                    Reject
+                  </Button>
+                </Grid.Col>
+              </Grid>
+            )}
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js">
+              <div>
+                <Viewer
+                  fileUrl={fileGetRequest(docid)}
+                  withCredentials
+                  plugins={[defaultLayoutPluginInstance]}
+                />
+              </div>
+            </Worker>
+
+          </Container>
+        </Grid.Col>
+        <Grid.Col lg={4} orderlg={1}>
+          <Center>
+            <Title m={12} order={4}>Approval Status</Title>
+          </Center>
+          <Center>
+            {data && (
+              <Timeline active={data.transactions.length - 1}>
+                {data.transactions.map((item, idx) => (
+                  <Timeline.Item
+                    bullet={idx === 0 ? <IconPlus size={12} /> : <IconCheck size={12} />}
+                    key={item.txId}
+                    title={item.message}
+                  >
+                    <Text color="dimmed" size="xs">
+                      {new Date(item.timestamp).toUTCString()}
+                    </Text>
+                  </Timeline.Item>
+                ))}
+                {data.pendingStates.map((item) => (
+                  <Timeline.Item
+                    // bullet={<IconPlus size={12} />}
+                    key={item.status}
+                    title={`${item.designation} approval`}
+                  >
+                    <Text color="dimmed" size="xs">PENDING</Text>
+                  </Timeline.Item>
+                ))}
+              </Timeline>
+            )}
+          </Center>
+        </Grid.Col>
+      </Grid>
+    </div>
   );
 }
 

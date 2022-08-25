@@ -20,6 +20,7 @@ export const GET_APPROVAL_STATUS_URL = `${BACKEND_URL}/form/approval_status`;
 export const GET_APPROVED_DOCS = `${BACKEND_URL}/form/response/approved`;
 export const GET_REJECTED_DOCS = `${BACKEND_URL}/form/response/rejected`;
 export const GET_PROCESSING_DOCS = `${BACKEND_URL}/form/response/processing`;
+export const GET_DOCS_STATUS = `${BACKEND_URL}/form/response/doc_status`;
 
 // approvals
 export const GET_APPROVE_DOC_URL = `${BACKEND_URL}/form/response/toapprove`;
