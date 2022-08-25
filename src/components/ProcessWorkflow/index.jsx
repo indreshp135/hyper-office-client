@@ -3,7 +3,7 @@ import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-
+import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import {
   Button, Container, Grid, createStyles, Timeline, Title, Center, Text
 } from '@mantine/core';
@@ -26,6 +26,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function ProcessWorkflow({ viewOnly }) {
+  const getFilePluginInstance = getFilePlugin();
   const { classes } = useStyles();
   const { docid } = useParams();
   const { request } = useLoading();
@@ -110,7 +111,7 @@ export function ProcessWorkflow({ viewOnly }) {
                 <Viewer
                   fileUrl={fileGetRequest(docid)}
                   withCredentials
-                  plugins={[defaultLayoutPluginInstance]}
+                  plugins={[defaultLayoutPluginInstance, getFilePluginInstance]}
                 />
               </div>
             </Worker>
@@ -118,35 +119,37 @@ export function ProcessWorkflow({ viewOnly }) {
           </Container>
         </Grid.Col>
         <Grid.Col lg={4} orderlg={1}>
-          <Center>
-            <Title m={12} order={4}>Approval Status</Title>
-          </Center>
-          <Center>
-            {data && (
-              <Timeline active={data.transactions.length - 1}>
-                {data.transactions.map((item, idx) => (
-                  <Timeline.Item
-                    bullet={idx === 0 ? <IconPlus size={12} /> : data.completedStates[idx] === 'Rejected' ? <IconX size={12} /> : <IconCheck size={12} />}
-                    key={item.txId}
-                    title={item.message}
-                  >
-                    <Text color="dimmed" size="xs">
-                      {new Date(item.timestamp).toUTCString()}
-                    </Text>
-                  </Timeline.Item>
-                ))}
-                {data.pendingStates.map((item) => (
-                  <Timeline.Item
-                    // bullet={<IconPlus size={12} />}
-                    key={item.status}
-                    title={`${item.designation} approval`}
-                  >
-                    <Text color="dimmed" size="xs">PENDING</Text>
-                  </Timeline.Item>
-                ))}
-              </Timeline>
-            )}
-          </Center>
+
+          <Container my={50}>
+            <Center>
+              <Title m={12} order={4}>Approval Status</Title>
+            </Center>
+            <Center>
+              {data && (
+                <Timeline active={data.transactions.length - 1}>
+                  {data.transactions.map((item, idx) => (
+                    <Timeline.Item
+                      bullet={idx === 0 ? <IconPlus size={12} /> : data.completedStates[idx] === 'Rejected' ? <IconX size={12} /> : <IconCheck size={12} />}
+                      key={item.txId}
+                      title={item.message}
+                    >
+                      <Text color="dimmed" size="xs">
+                        {new Date(item.timestamp).toUTCString()}
+                      </Text>
+                    </Timeline.Item>
+                  ))}
+                  {data.pendingStates.map((item) => (
+                    <Timeline.Item
+                      key={item.status}
+                      title={`${item.designation} approval`}
+                    >
+                      <Text color="dimmed" size="xs">PENDING</Text>
+                    </Timeline.Item>
+                  ))}
+                </Timeline>
+              )}
+            </Center>
+          </Container>
         </Grid.Col>
       </Grid>
     </div>

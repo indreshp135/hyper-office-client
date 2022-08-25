@@ -21,7 +21,8 @@ import {
   GET_APPROVE_DOC_URL,
   APPROVE_OR_REJECT_DOC_URL,
   GET_APPROVAL_STATUS_URL,
-  GET_LANDING_STATS
+  GET_LANDING_STATS,
+  QUERY_URL
 } from './urls';
 
 // withCredentials
@@ -153,3 +154,6 @@ export const saveFormResponseRequest = (formId, response) => axios.post(
 
 // get file
 export const fileGetRequest = (fileId) => `${GET_FILE}/${fileId}/view`;
+
+// query requests
+export const queryRequest = ({ query, formId }) => axios.post(`${QUERY_URL}`, { query, formId }, withCredentials);

@@ -38,3 +38,6 @@ export const SET_ROLES_URL = `${BACKEND_URL}/roles/set`;
 export const WORKFLOW_URL = `${BACKEND_URL}/workflow`;
 export const SEND_PDF_URL = `${BACKEND_URL}/form/save_pdf`;
 export const SAVE_FORM_RESPONSE_URL = `${BACKEND_URL}/form/save_response`;
+
+// search
+export const QUERY_URL = `${BACKEND_URL}/elastic/query`;

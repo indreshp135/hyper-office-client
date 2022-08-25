@@ -9,7 +9,7 @@ import {
 } from '@mantine/core';
 
 import MuiConfig from 'react-awesome-query-builder/lib/config/mui';
-import { getAllFormsRequest, getFormRequest } from '../../utils/requests';
+import { getAllFormsRequest, getFormRequest, queryRequest } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 import 'react-awesome-query-builder/lib/css/styles.css';
 import './style.css';
@@ -23,6 +23,7 @@ export function QueryBuilder() {
   const [selectedForm, setSelectedForm] = useState();
   const [queryBuilderConfig, setQueryBuilderConfig] = useState(InitialConfig);
   const [showQueryBuilder, setShowQueryBuilder] = useState(false);
+  const [formId, setFormId] = useState();
   const [queryState, setQueryState] = useState({
     tree: QbUtils.checkTree(
       QbUtils.loadTree(queryValue),
@@ -52,8 +53,6 @@ export function QueryBuilder() {
 
   const generateQueryBuilderConfig = () => {
     const newFields = {};
-    let fieldNumber = 1;
-    // console.log(queryForm);
     // eslint-disable-next-line no-restricted-syntax
     for (const formConfig of queryForm) {
       const field = {};
@@ -67,13 +66,11 @@ export function QueryBuilder() {
         field.valueSources = ['value'];
         const listValues = formConfig.options.map((option) => (
           { value: option.id, title: option.value }));
-        console.log(listValues);
         field.fieldSettings = { listValues };
       } else {
         field.type = 'text';
       }
-      newFields[`field${fieldNumber}`] = field;
-      fieldNumber += 1;
+      newFields[`"${formConfig.id}"`] = field;
     }
     const newConfig = { ...InitialConfig, fields: newFields };
     setQueryBuilderConfig(newConfig);
@@ -84,18 +81,18 @@ export function QueryBuilder() {
     try {
       const response = await request(() => getFormRequest(selectedForm));
       setQueryForm(JSON.parse(response.data.form.data));
+      setFormId(response.data.form.id);
     } catch (error) {
       showNotification({
         color: 'red',
         title: 'Error while fetching data',
         message: error.response.data
-                        && error.response.data.message ? error.response.data.message : error.message
+                  && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };
 
   const onChange = useCallback((immutableTree, config) => {
-    console.log(immutableTree);
     setQueryState((prevState) => ({ ...prevState, tree: immutableTree, config }));
   }, []);
 
@@ -138,7 +135,20 @@ export function QueryBuilder() {
               {JSON.stringify(QbUtils.elasticSearchFormat(queryState.tree, queryState.config))}
             </pre>
           </div>
-          <Center><Button onClick={() => {}} my={20}>Run Query</Button></Center>
+          <Center>
+            <Button
+              onClick={() => request(() => queryRequest({
+                query: JSON.stringify(
+                  QbUtils.elasticSearchFormat(queryState.tree, queryState.config)
+                ),
+                formId
+              }))}
+              my={20}
+            >
+              Run Query
+            </Button>
+
+          </Center>
         </>
       )}
     </Container>

@@ -57,7 +57,7 @@ export function Auth() {
     try {
       const response = await request(getRolesRequest);
       if (response.status === 200) {
-        setRoles(response.data);
+        setRoles([...response.data, 'User']);
       } else {
         showNotification({
           color: 'red',
