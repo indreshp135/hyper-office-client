@@ -19,5 +19,6 @@ export const navLinks = [
   { link: '/showapproved', label: 'showApproved', icon: IconDevicesPc },
   { link: '/showrejected', label: 'showRejected', icon: IconDevicesPc },
   { link: '/showpending', label: 'showPending', icon: IconDevicesPc },
-  { link: '/documentsForApproval', label: 'documentsForApproval', icon: IconDevicesPc }
+  { link: '/documentsForApproval', label: 'documentsForApproval', icon: IconDevicesPc },
+  { link: '/queryBuilder', label: 'queryBuilder', icon: IconDevicesPc }
 ];

@@ -22,6 +22,7 @@ import {
   getAllFormsRequest,
   getApproveDocRequest
 } from '../utils/requests';
+import { QueryBuilder } from '../components/QueryBuilder';
 
 export const publicRoutes = [
   {
@@ -172,5 +173,11 @@ export const privateRoutes = [
     component: <GeneralPageContainer child={<ProcessWorkflow />} />,
     name: 'Process Workflow',
     label: 'documentsForApproval'
+  },
+  {
+    url: '/queryBuilder',
+    component: <GeneralPageContainer child={<QueryBuilder />} />,
+    name: 'Query Builder',
+    label: 'queryBuilder'
   }
 ];
