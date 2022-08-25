@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { FormBuilder } from 'react-forms-builder-135';
 import { showNotification } from '@mantine/notifications';
 import {
-  Center, Container, createStyles, Select, TextInput, Title
+  Center, Container, createStyles, Select, TextInput, Title, MultiSelect
 } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  createFormRequest, getFormRequest, listWorkflowsRequest, updateFormRequest
+  createFormRequest, getFormRequest, listWorkflowsRequest, updateFormRequest, getAllFormsRequest
 } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 
@@ -49,11 +49,16 @@ export function Formbuilder() {
   const [formData, setFormData] = useState([]);
   const [workflowData, setWorkflowData] = useState([]);
 
+  const [formList, setFormList] = useState([]);
+  const [dependsOnForms, setDependsOnForms] = useState();
+
   const { classes } = styles();
 
   const createForm = async (formItem) => {
     try {
-      const response = await request(() => createFormRequest(name, formItem, workflow));
+      const response = await request(() => {
+        createFormRequest(name, formItem, workflow, dependsOnForms);
+      });
       if (response.status === 200) {
         showNotification({
           type: 'success',
@@ -79,7 +84,7 @@ export function Formbuilder() {
   const updateForm = async (formItem) => {
     try {
       const response = await request(() => updateFormRequest({
-        id: formId, data: formItem, name, workflow
+        id: formId, data: formItem, name, workflow, dependsOnForms
       }));
       if (response.status === 200) {
         showNotification({
@@ -110,6 +115,7 @@ export function Formbuilder() {
         setFormData(JSON.parse(response.data.form.data));
         setName(response.data.form.name);
         setWorkflow(response.data.form.workflow);
+        setDependsOnForms(response.data.form.depends_on);
       } else {
         showNotification({
           color: 'red',
@@ -153,11 +159,40 @@ export function Formbuilder() {
     }
   };
 
+  const getAllForms = async () => {
+    try {
+      const response = await request(getAllFormsRequest);
+      if (response.status === 200) {
+        const formsList = [];
+        response.data.forEach((formListItme) => {
+          if (formListItme.id !== formId) {
+            formsList.push({ value: formListItme.id, label: formListItme.name });
+          }
+        });
+        setFormList(formsList);
+      } else {
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching workflows',
+          message: response.data.message
+        });
+      }
+    } catch (error) {
+      showNotification({
+        color: 'red',
+        title: 'Error fetching forms',
+        message: error.response.data
+        && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
   useEffect(() => {
     getWorkflows();
     if (formId) {
       getForm();
     }
+    getAllForms();
   }, []);
 
   return (
@@ -174,6 +209,17 @@ export function Formbuilder() {
           setWorkflow(opted);
         }}
         value={workflow}
+      />
+      <MultiSelect
+        style={{ marginTop: 30 }}
+        data={formList}
+        placeholder="Select dependent forms"
+        label="Dependent Forms"
+        classNames={classes}
+        onChange={setDependsOnForms}
+        value={dependsOnForms}
+        searchable
+        clearable
       />
       <FormBuilder
         formItems={

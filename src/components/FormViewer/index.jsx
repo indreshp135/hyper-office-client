@@ -1,11 +1,11 @@
 import { showNotification } from '@mantine/notifications';
 import {
-  Container, Title, Center, Modal, createStyles, useMantineTheme, TextInput, Button
+  Container, Title, Center, Modal, createStyles, useMantineTheme, TextInput, Button, List
 } from '@mantine/core';
 import React, { useState, useEffect, useRef } from 'react';
 import { FormGenerator } from 'react-forms-builder-135';
 import { useParams } from 'react-router-dom';
-import { getFormRequest } from '../../utils/requests';
+import { getFormRequest, getFormApprovalStatusRequest } from '../../utils/requests';
 import { useLoading } from '../../hooks/useLoading';
 import { createPDF } from '../../utils/pdf';
 import { useAuth } from '../../hooks/useAuth';
@@ -42,6 +42,9 @@ export function FormViewer() {
   const { request } = useLoading();
   const [formName, setFormName] = useState('');
   const [formResponseData, setFormResponseData] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [dependsOnForms, setDependsOnForms] = useState([]);
+  const [dependentFormStatuses, setDependentFormStatuses] = useState([]);
   const [opened, setOpened] = useState(false);
   const { classes } = styles();
   const [fileName, setFileName] = useState('');
@@ -53,6 +56,17 @@ export function FormViewer() {
       if (response.data && response.data.form) {
         setFormData(JSON.parse(response.data.form.data));
         setFormName(response.data.form.name);
+        setDependsOnForms(response.data.form.depends_on);
+        const formStatuses = [];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const form of response.data.form.depends_on) {
+          // eslint-disable-next-line no-await-in-loop
+          const formStatus = await request(() => getFormApprovalStatusRequest(form));
+          // eslint-disable-next-line max-len
+          formStatuses.push({ formId: form, formName: formStatus.data.name, approvalStatus: formStatus.data.approval_status });
+        }
+        setDependentFormStatuses(formStatuses);
+
         if (response.data.saved_response) {
           setFormResponseData(JSON.parse(response.data.saved_response.data));
         }
@@ -80,6 +94,10 @@ export function FormViewer() {
     getForm();
   }, []);
 
+  useEffect(() => {
+    console.log(dependentFormStatuses);
+  }, [dependentFormStatuses]);
+
   const handleDrawerClose = async () => {
     // await request(() => saveFormResponseRequest(formId, formResponseData));
     createPDF(ref.current, fileName, user.email, formId, formResponseData);
@@ -96,6 +114,19 @@ export function FormViewer() {
           <Center mt={10}>
             <Title>{formName}</Title>
           </Center>
+          <List withPadding>
+            {dependentFormStatuses.map((form) => (
+              <List.Item>
+                Form Name:
+                {' '}
+                {form.formName}
+                {' '}
+                Approval Status:
+                {' '}
+                {form.approvalStatus}
+              </List.Item>
+            ))}
+          </List>
           <FormGenerator
             formData={formData}
             onSubmit={(data) => { setFormResponseData(data); setOpened(true); }}
