@@ -7,7 +7,12 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import {
   Button, Container, Grid, createStyles, Timeline, Title, Center, Text
 } from '@mantine/core';
-import { IconCheck, IconTrash, IconPlus } from '@tabler/icons';
+import {
+  IconCheck,
+  IconTrash,
+  IconPlus,
+  IconX
+} from '@tabler/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { showNotification } from '@mantine/notifications';
@@ -121,7 +126,7 @@ export function ProcessWorkflow({ viewOnly }) {
               <Timeline active={data.transactions.length - 1}>
                 {data.transactions.map((item, idx) => (
                   <Timeline.Item
-                    bullet={idx === 0 ? <IconPlus size={12} /> : <IconCheck size={12} />}
+                    bullet={idx === 0 ? <IconPlus size={12} /> : data.completedStates[idx] === 'Rejected' ? <IconX size={12} /> : <IconCheck size={12} />}
                     key={item.txId}
                     title={item.message}
                   >

@@ -1970,6 +1970,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@phuocng/react-pdf-viewer@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@phuocng/react-pdf-viewer/-/react-pdf-viewer-1.7.0.tgz#5b9db23f8056407423f9a99abb3a4be1b0fef646"
+  integrity sha512-mZ11kjScNXMLHssHMyy/849KEXWWZqc0lCh94xjv/SgmFNsx9jjpUOjws57WTVNfxz1/iffkGUvzCWeJl6V2vA==
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.7"
   resolved "https://registry.npmjs.org/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.7.tgz"
