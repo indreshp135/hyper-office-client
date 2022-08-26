@@ -5,7 +5,7 @@ import {
 import { showNotification } from '@mantine/notifications';
 import 'react-awesome-query-builder/lib/css/compact_styles.css';
 import {
-  Select, Button, Container, Title, Center
+  Select, Button, Container, Title, Center, Table
 } from '@mantine/core';
 
 import MuiConfig from 'react-awesome-query-builder/lib/config/mui';
@@ -21,6 +21,7 @@ export function QueryBuilder() {
   const [formList, setFormList] = useState([]);
   const [queryForm, setQueryForm] = useState();
   const [selectedForm, setSelectedForm] = useState();
+  const [queryResult, setQueryResult] = useState();
   const [queryBuilderConfig, setQueryBuilderConfig] = useState(InitialConfig);
   const [showQueryBuilder, setShowQueryBuilder] = useState(false);
   const [formId, setFormId] = useState();
@@ -46,7 +47,7 @@ export function QueryBuilder() {
         color: 'red',
         title: 'Error while fetching data',
         message: error.response.data
-                      && error.response.data.message ? error.response.data.message : error.message
+          && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };
@@ -60,7 +61,7 @@ export function QueryBuilder() {
       const { element } = formConfig;
       if (element === 'NumberInput' || element === 'Rating' || element === 'Range') {
         field.type = 'number';
-      } else if (element === 'Dropdown' || element === 'Checkboxes' || element === 'RadioButtons') {
+      } else if (element === 'Checkboxes' || element === 'RadioButtons') {
         field.type = 'select';
         // field.operators = ['equal'];
         field.valueSources = ['value'];
@@ -87,7 +88,7 @@ export function QueryBuilder() {
         color: 'red',
         title: 'Error while fetching data',
         message: error.response.data
-                  && error.response.data.message ? error.response.data.message : error.message
+          && error.response.data.message ? error.response.data.message : error.message
       });
     }
   };
@@ -115,6 +116,36 @@ export function QueryBuilder() {
     }
   }, [queryForm]);
 
+  const runQuery = async () => {
+    try {
+      const response = await request(() => queryRequest({
+        query: JSON.stringify(
+          QbUtils.sqlFormat(queryState.tree, queryState.config)
+        ),
+        formId
+      }));
+
+      if (response.data) {
+        setQueryResult(response.data);
+      } else {
+        setQueryResult(null);
+        showNotification({
+          color: 'red',
+          title: 'Error while fetching data',
+          message: response.status
+        });
+      }
+    } catch (error) {
+      setQueryResult(null);
+      showNotification({
+        color: 'red',
+        title: 'Error while fetching data',
+        message: error.response.data
+          && error.response.data.message ? error.response.data.message : error.message
+      });
+    }
+  };
+
   return (
     <Container my={50}>
       <Center><Title>Run Query</Title></Center>
@@ -137,19 +168,52 @@ export function QueryBuilder() {
           </div>
           <Center>
             <Button
-              onClick={() => request(() => queryRequest({
-                query: JSON.stringify(
-                  QbUtils.sqlFormat(queryState.tree, queryState.config)
-                ),
-                formId
-              }))}
+              onClick={runQuery}
               my={20}
             >
               Run Query
             </Button>
-
+          </Center>
+          <Center>
+            <Button
+              onClick={() => setQueryResult(null)}
+              disabled={!queryResult}
+              color="red"
+              my={20}
+            >
+              Clear Query
+            </Button>
           </Center>
         </>
+      )}
+
+      {queryResult && (
+        <Container py="md">
+          <Center>
+            <Title order={4}>Query Results</Title>
+            {queryResult.columns.length === 0 && (
+              'No results found'
+            )}
+          </Center>
+          <Table highlightOnHover>
+            <thead>
+              <tr>
+                {queryResult.columns.map((col) => (
+                  <th key={col}>{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {queryResult.values.map((row) => (
+                <tr key={row}>
+                  {row.map((col) => (
+                    <td>{col || '-'}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Container>
       )}
     </Container>
 
