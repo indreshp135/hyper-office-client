@@ -41,7 +41,7 @@ export function ProcessWorkflow({ viewOnly }) {
         showNotification({
           color: 'green',
           title: 'Success',
-          message: `Document has been ${status}`
+          message: `Document has been ${status}${status === 'approve' ? 'd' : 'ed'}`
         });
         navigate('/documentsForApproval');
       } else {
