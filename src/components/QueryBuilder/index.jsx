@@ -70,7 +70,7 @@ export function QueryBuilder() {
       } else {
         field.type = 'text';
       }
-      newFields[`"${formConfig.id}"`] = field;
+      newFields[`id_${formConfig.id}`] = field;
     }
     const newConfig = { ...InitialConfig, fields: newFields };
     setQueryBuilderConfig(newConfig);
@@ -132,14 +132,14 @@ export function QueryBuilder() {
             Elastic Search:
             {' '}
             <pre>
-              {JSON.stringify(QbUtils.elasticSearchFormat(queryState.tree, queryState.config))}
+              {JSON.stringify(QbUtils.sqlFormat(queryState.tree, queryState.config))}
             </pre>
           </div>
           <Center>
             <Button
               onClick={() => request(() => queryRequest({
                 query: JSON.stringify(
-                  QbUtils.elasticSearchFormat(queryState.tree, queryState.config)
+                  QbUtils.sqlFormat(queryState.tree, queryState.config)
                 ),
                 formId
               }))}
