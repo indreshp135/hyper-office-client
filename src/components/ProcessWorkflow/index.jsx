@@ -5,7 +5,7 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { getFilePlugin } from '@react-pdf-viewer/get-file';
 import {
-  Button, Container, Grid, createStyles, Timeline, Title, Center, Text
+  Button, Container, Grid, createStyles, Timeline, Title, Center, Text, Anchor
 } from '@mantine/core';
 import {
   IconCheck,
@@ -136,6 +136,11 @@ export function ProcessWorkflow({ viewOnly }) {
                       <Text color="dimmed" size="xs">
                         {new Date(item.timestamp).toUTCString()}
                       </Text>
+                      <Anchor href={`https://explorer.hyper-office.tech/?tab=transactions&transId=${item.txId}`} target="_blank" rel="noreferrer">
+                        <Text color="dimmed" size="xs" style={{ wordBreak: 'break-all' }}>
+                          {item.txId}
+                        </Text>
+                      </Anchor>
                     </Timeline.Item>
                   ))}
                   {data.pendingStates.map((item) => (
